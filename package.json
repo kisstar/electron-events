@@ -1,0 +1,15 @@
+{
+  "name": "electron-events",
+  "version": "1.0.0",
+  "description": "Provide single point and broadcast event system.",
+  "main": "index.js",
+  "scripts": {},
+  "keywords": [
+    "electron",
+    "ipc",
+    "events",
+    "electron-events"
+  ],
+  "author": "kisstar <dwh.chn@foxmail.com>",
+  "license": "MIT"
+}
