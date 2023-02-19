@@ -1,0 +1,1 @@
+export const CREATE_WINDOW = 'CREATE_WINDOW';

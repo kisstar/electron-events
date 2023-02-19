@@ -1,3 +1,10 @@
-import { contextBridge } from 'electron';
+import { contextBridge, ipcRenderer } from 'electron';
 
-contextBridge.exposeInMainWorld('electronAPI', {});
+import { WindowInfo } from '../main/event';
+import { CREATE_WINDOW } from '../utils';
+
+contextBridge.exposeInMainWorld('electronAPI', {
+  createWindow: (windowInfo: WindowInfo) => {
+    ipcRenderer.invoke(CREATE_WINDOW, windowInfo);
+  }
+});

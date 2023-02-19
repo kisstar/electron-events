@@ -17,7 +17,7 @@ export default defineConfig(({ command }) => {
       entry: {
         preload: 'packages/demo/preload/index.ts'
       },
-      onstart(options) {
+      onstart(options: any) {
         options.reload();
       }
     } as any);

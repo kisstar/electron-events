@@ -1,6 +1,7 @@
 import { release } from 'os';
 import { join } from 'path';
 import { app, BrowserWindow } from 'electron';
+import './event';
 
 // Disable GPU Acceleration for Windows 7
 if (release().startsWith('6.1')) app.disableHardwareAcceleration();
