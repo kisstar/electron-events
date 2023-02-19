@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite';
 import electron from 'vite-plugin-electron';
+import vue from '@vitejs/plugin-vue';
 
 export default defineConfig(({ command }) => {
   const isDevelopment = command === 'serve';
@@ -23,6 +24,6 @@ export default defineConfig(({ command }) => {
   }
 
   return {
-    plugins: [electron(electronOptions)]
+    plugins: [vue(), electron(electronOptions)]
   };
 });

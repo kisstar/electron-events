@@ -1,3 +1,7 @@
-import { sayHi } from './boot';
+import { createApp } from 'vue';
+import { router } from './router';
+import App from './App.vue';
 
-sayHi();
+createApp(App)
+  .use(router)
+  .mount('#app');
