@@ -1,5 +1,6 @@
 import { EventEmitter } from 'events';
 import { isArray, isFunction, noop } from 'lodash';
+import { ANY_WINDOW_SYMBOL } from '@core/utils';
 
 interface NormalizeOnArg {
   windowNames: string[];
@@ -64,9 +65,7 @@ export class IpcEvents {
   ): this {
     for (let i = 0; i < windowNames.length; i++) {
       for (let j = 0; j < eventNames.length; j++) {
-        const resEventName = `${windowNames[i] ? windowNames[i] + '_' : ''}${
-          eventNames[j]
-        }`;
+        const resEventName = this._getEventName(windowNames[i], eventNames[j]);
 
         if (once) {
           this.eventMap.once(resEventName, listener);
@@ -77,6 +76,10 @@ export class IpcEvents {
     }
 
     return this;
+  }
+
+  protected _getEventName(windowName: string, eventName: string) {
+    return `${windowName ? windowName + '_' : ''}${eventName}`;
   }
 
   once(eventName: string | string[], listener: AnyFunction): this;
@@ -111,7 +114,12 @@ export class IpcEvents {
       eventName = [eventName];
     }
 
-    eventName.forEach(name => this.eventMap.emit(name, ...args));
+    eventName.forEach(name => {
+      const resEventName = this._getEventName(ANY_WINDOW_SYMBOL, name);
+
+      this.eventMap.emit(name, ...args);
+      this.eventMap.emit(resEventName, ...args);
+    });
   }
 
   off(
@@ -137,9 +145,7 @@ export class IpcEvents {
   ): this {
     for (let i = 0; i < windowNames.length; i++) {
       for (let j = 0; j < eventNames.length; j++) {
-        const resEventName = `${windowNames[i] ? windowNames[i] + '_' : ''}${
-          eventNames[j]
-        }`;
+        const resEventName = this._getEventName(windowNames[i], eventNames[j]);
 
         this.eventMap.off(resEventName, listener);
       }

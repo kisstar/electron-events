@@ -2,7 +2,7 @@ import { BrowserWindow, ipcMain } from 'electron';
 import { isArray } from 'lodash';
 import { windowPool } from '../base';
 import { IpcEvents } from '../models';
-import { EVENT_CENTER, MAIN_EVENT } from '../utils';
+import { ANY_WINDOW_SYMBOL, EVENT_CENTER, MAIN_EVENT_NAME } from '../utils';
 
 interface MainEventCenterParams {
   toName: string | string[];
@@ -27,20 +27,26 @@ export class MainIpcEvents extends IpcEvents {
       if (!windowName) {
         return;
       }
+      if (ANY_WINDOW_SYMBOL === toName) {
+        toName = windowPool.getAllNames();
+        toName.unshift(MAIN_EVENT_NAME);
+      }
       if (!isArray(toName)) {
         toName = [toName];
       }
 
       toName.forEach(winName => {
-        if (MAIN_EVENT === winName) {
+        if (MAIN_EVENT_NAME === winName) {
           if (!isArray(eventName)) {
             eventName = [eventName];
           }
 
           eventName.forEach(evName => {
-            const resEventName = `${windowName}_${evName}`;
+            const resEventName = this._getEventName(windowName, evName);
+            const anyEventName = this._getEventName(ANY_WINDOW_SYMBOL, evName);
 
             this.eventMap.emit(resEventName, ...payload);
+            this.eventMap.emit(anyEventName, ...payload);
           });
           return;
         }
@@ -65,6 +71,9 @@ export class MainIpcEvents extends IpcEvents {
     eventName: string | string[],
     ...args: any[]
   ) {
+    if (ANY_WINDOW_SYMBOL === windowName) {
+      windowName = windowPool.getAllNames();
+    }
     if (!isArray(windowName)) {
       windowName = [windowName];
     }
@@ -77,7 +86,7 @@ export class MainIpcEvents extends IpcEvents {
       }
 
       toWindow.webContents.send(EVENT_CENTER, {
-        fromName: MAIN_EVENT,
+        fromName: MAIN_EVENT_NAME,
         eventName,
         payload: args
       });

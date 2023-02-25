@@ -41,4 +41,8 @@ export class WindowPool {
   getName(id: number) {
     return this.idMap.get(id);
   }
+
+  getAllNames() {
+    return [...this.idMap.values()];
+  }
 }

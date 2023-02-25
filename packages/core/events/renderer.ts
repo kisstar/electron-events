@@ -1,7 +1,7 @@
 import { ipcRenderer } from 'electron';
 import { isArray } from 'lodash';
 import { IpcEvents } from '../models';
-import { EVENT_CENTER } from '../utils';
+import { ANY_WINDOW_SYMBOL, EVENT_CENTER } from '../utils';
 
 interface RendererEventCenterParams {
   fromName: string;
@@ -21,9 +21,11 @@ export class RendererIpcEvents extends IpcEvents {
       }
 
       eventName.forEach(evName => {
-        const resEventName = `${fromName}_${evName}`;
+        const resEventName = this._getEventName(fromName, evName);
+        const anyEventName = this._getEventName(ANY_WINDOW_SYMBOL, evName);
 
         this.eventMap.emit(resEventName, ...payload);
+        this.eventMap.emit(anyEventName, ...payload);
       });
     });
   }
