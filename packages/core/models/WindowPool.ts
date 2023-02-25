@@ -6,8 +6,14 @@ export class WindowPool {
   protected idMap = new Map<number, string>();
 
   add(name: string, bw: BrowserWindow) {
+    if (this.pool.has(name)) {
+      this.remove(name);
+    }
+
     this.pool.set(name, bw);
     this.idMap.set(bw.id, name);
+
+    bw.on('close', () => this.remove(name));
   }
 
   get(idOrname: string | number) {
@@ -28,6 +34,12 @@ export class WindowPool {
 
       idOrname = this.idMap.get(idOrname) || '';
       this.idMap.delete(id);
+    } else {
+      const bw = this.pool.get(idOrname);
+
+      if (bw) {
+        this.idMap.delete(bw.id);
+      }
     }
 
     return this.pool.delete(idOrname);

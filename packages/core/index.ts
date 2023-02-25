@@ -1,5 +1,8 @@
+import { bind } from 'lodash';
 import { MainIpcEvents, RendererIpcEvents } from './events';
 import { windowPool } from './base';
+
+type EventMethod = keyof RendererIpcEvents;
 
 let mainEvents: MainIpcEvents | null = null;
 let rendererEvents: RendererIpcEvents | null = null;
@@ -16,7 +19,16 @@ export const useEvents = () => {
   }
 
   if (!rendererEvents) {
+    const methodList: EventMethod[] = ['on', 'once', 'emit', 'emitTo', 'off'];
+
     rendererEvents = new RendererIpcEvents();
+    methodList.forEach(
+      methodName =>
+        (rendererEvents![methodName] = bind(
+          rendererEvents![methodName],
+          rendererEvents
+        ))
+    );
   }
 
   return rendererEvents;
