@@ -33,7 +33,7 @@ export class RendererIpcEvents extends IpcEvents {
     eventName: string | string[],
     ...args: any[]
   ) {
-    ipcRenderer.send(EVENT_CENTER, {
+    ipcRenderer.invoke(EVENT_CENTER, {
       toName: windowName,
       eventName,
       payload: args
