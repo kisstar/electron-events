@@ -1,7 +1,7 @@
 import { release } from 'os';
-import { join } from 'path';
 import { app, BrowserWindow } from 'electron';
-import './event';
+import { useWindowPool } from '@core/index';
+import { preload } from './event';
 
 // Disable GPU Acceleration for Windows 7
 if (release().startsWith('6.1')) app.disableHardwareAcceleration();
@@ -15,16 +15,17 @@ if (!app.requestSingleInstanceLock()) {
 }
 
 let win: BrowserWindow | null = null;
-const preload = join(__dirname, './preload.js');
 
 async function createWindow() {
+  const windowPool = useWindowPool();
+
   win = new BrowserWindow({
     title: 'Electron Events',
     webPreferences: {
       preload
     }
   });
-
+  windowPool.add('App', win);
   win.loadURL(process.env.VITE_DEV_SERVER_URL);
   win.webContents.openDevTools();
 }

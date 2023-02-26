@@ -1,10 +1,8 @@
-import { contextBridge, ipcRenderer } from 'electron';
+import { contextBridge } from 'electron';
+import { useEvents } from '@core/index';
 
-import { WindowInfo } from '../main/event';
-import { CREATE_WINDOW } from '../utils';
+const events = useEvents();
 
 contextBridge.exposeInMainWorld('electronAPI', {
-  createWindow: (windowInfo: WindowInfo) => {
-    ipcRenderer.invoke(CREATE_WINDOW, windowInfo);
-  }
+  events
 });
