@@ -1,5 +1,5 @@
 import { EventEmitter } from 'events';
-import { isArray, isFunction, noop } from 'lodash';
+import { isArray, isEmpty, isFunction, isUndefined, noop } from 'lodash';
 import { ANY_WINDOW_SYMBOL } from '@core/utils';
 
 interface NormalizeOnArg {
@@ -35,7 +35,7 @@ export class IpcEvents {
 
   protected _normalizeArg(
     windowName: string | string[],
-    eventName: string | string[] | AnyFunction,
+    eventName?: string | string[] | AnyFunction,
     listener?: AnyFunction
   ): NormalizeOnArg {
     if (isFunction(eventName)) {
@@ -43,8 +43,12 @@ export class IpcEvents {
       eventName = windowName;
       windowName = '';
     }
+    if (isUndefined(eventName)) {
+      eventName = windowName;
+      windowName = '';
+    }
     if (!isArray(windowName)) {
-      windowName = windowName ? [windowName] : [];
+      windowName = [windowName];
     }
     if (!isArray(eventName)) {
       eventName = [eventName];
@@ -63,19 +67,33 @@ export class IpcEvents {
     listener: AnyFunction,
     once = false
   ): this {
-    for (let i = 0; i < windowNames.length; i++) {
-      for (let j = 0; j < eventNames.length; j++) {
-        const resEventName = this._getEventName(windowNames[i], eventNames[j]);
+    this._each(windowNames, eventNames, (windowName, eventName) => {
+      const resEventName = this._getEventName(windowName, eventName);
 
-        if (once) {
-          this.eventMap.once(resEventName, listener);
-        } else {
-          this.eventMap.on(resEventName, listener);
-        }
+      if (once) {
+        this.eventMap.once(resEventName, listener);
+      } else {
+        this.eventMap.on(resEventName, listener);
       }
-    }
+    });
 
     return this;
+  }
+
+  protected _each(
+    windowNames: string[],
+    eventNames: string[],
+    cb: (windowName: string, eventName: string) => void
+  ) {
+    if (isEmpty(windowNames)) {
+      windowNames = [''];
+    }
+
+    for (let i = 0; i < windowNames.length; i++) {
+      for (let j = 0; j < eventNames.length; j++) {
+        cb(windowNames[i], eventNames[j]);
+      }
+    }
   }
 
   protected _getEventName(windowName: string, eventName: string) {
@@ -122,10 +140,18 @@ export class IpcEvents {
     });
   }
 
+  off(eventName: string | string[]): this;
+  off(windowName: string | string[], eventName: string | string[]): this;
+  off(eventName: string | string[], listener: AnyFunction): this;
   off(
     windowName: string | string[],
     eventName: string | string[],
     listener: AnyFunction
+  ): this;
+  off(
+    windowName: string | string[],
+    eventName?: string | string[] | AnyFunction,
+    listener?: AnyFunction
   ): this {
     const { windowNames, eventNames, callback } = this._normalizeArg(
       windowName,
@@ -143,13 +169,11 @@ export class IpcEvents {
     eventNames: string[],
     listener: AnyFunction
   ): this {
-    for (let i = 0; i < windowNames.length; i++) {
-      for (let j = 0; j < eventNames.length; j++) {
-        const resEventName = this._getEventName(windowNames[i], eventNames[j]);
+    this._each(windowNames, eventNames, (windowName, eventName) => {
+      const resEventName = this._getEventName(windowName, eventName);
 
-        this.eventMap.off(resEventName, listener);
-      }
-    }
+      this.eventMap.off(resEventName, listener);
+    });
 
     return this;
   }
