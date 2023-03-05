@@ -19,7 +19,15 @@ export const useEvents = () => {
   }
 
   if (!rendererEvents) {
-    const methodList: EventMethod[] = ['on', 'once', 'emit', 'emitTo', 'off'];
+    const methodList: EventMethod[] = [
+      'on',
+      'once',
+      'emit',
+      'emitTo',
+      'off',
+      'invoke',
+      'invokeTo'
+    ];
 
     rendererEvents = new RendererIpcEvents();
     methodList.forEach(

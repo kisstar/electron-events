@@ -10,6 +10,7 @@ interface NormalizeOnArg {
 
 export class IpcEvents {
   protected eventMap = new EventEmitter();
+  protected responsiveEventMap = new Map<string, AnyFunction>();
 
   on(eventName: string | string[], listener: AnyFunction): this;
   on(
