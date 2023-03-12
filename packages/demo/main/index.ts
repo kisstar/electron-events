@@ -1,4 +1,5 @@
 import { release } from 'os';
+import { join } from 'path';
 import { app, BrowserWindow } from 'electron';
 import { useWindowPool } from '@core/index';
 import { preload } from './event';
@@ -14,6 +15,8 @@ if (!app.requestSingleInstanceLock()) {
   process.exit(0);
 }
 
+const url = process.env.VITE_DEV_SERVER_URL;
+const indexHtml = join('../dist/index.html');
 let win: BrowserWindow | null = null;
 
 async function createWindow() {
@@ -26,8 +29,13 @@ async function createWindow() {
     }
   });
   windowPool.add('App', win);
-  win.loadURL(process.env.VITE_DEV_SERVER_URL);
-  win.webContents.openDevTools();
+
+  if (url) {
+    win.loadURL(url);
+    win.webContents.openDevTools();
+  } else {
+    win.loadFile(indexHtml);
+  }
 }
 
 app.whenReady().then(createWindow);
