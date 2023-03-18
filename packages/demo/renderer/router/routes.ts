@@ -1,4 +1,4 @@
-import Home from '../pages/Home.vue';
+import Home from '../pages/home/Home.vue';
 import Bramble from '../pages/Bramble.vue';
 import Briar from '../pages/Briar.vue';
 

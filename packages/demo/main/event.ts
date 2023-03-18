@@ -7,12 +7,15 @@ export const preload = join(__dirname, './preload.js');
 
 export interface WindowInfo {
   name: string;
+  rendererSendId: string;
   url: string;
   status: 'normal' | 'lock';
 }
 
+export type TestChannel = 'own' | 'someone' | 'several' | 'all';
+
 export interface TestChannelInfo {
-  type: 'own' | 'someone' | 'several' | 'all';
+  type: TestChannel;
 }
 
 const debug = getDebug('Main');

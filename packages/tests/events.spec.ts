@@ -1,13 +1,18 @@
-import { _electron as electron, type ElectronApplication } from 'playwright';
+import { _electron as electron } from 'playwright';
 import { test } from '@playwright/test';
 import { resolve } from './utils';
+import { testFirstPage } from './page';
+import { testRendererSendToSelf } from './broadcast';
+import { TestContext } from './test';
 
-let electronApp: ElectronApplication;
+const testCtx = {} as TestContext;
 
 test.beforeAll(async () => {
-  electronApp = await electron.launch({
+  const electronApp = await electron.launch({
     args: [resolve('dist-electron/index.js')]
   });
+
+  testCtx.electronApp = electronApp;
   electronApp.on('window', async page => {
     const filename = page
       .url()
@@ -27,5 +32,14 @@ test.beforeAll(async () => {
 });
 
 test.afterAll(async () => {
-  await electronApp.close();
+  // exit app
+  await testCtx.electronApp.close();
 });
+
+const main = async () => {
+  // test cases
+  testFirstPage(testCtx);
+  testRendererSendToSelf(testCtx);
+};
+
+main();
