@@ -83,7 +83,10 @@ events.on(MAIN_EVENT_NAME, SAY_HI, () => {
 
   <h3>Send Events</h3>
   <p>
-    <button @click="events.emitTo('main', SAY_HI)">
+    <button
+      id="renderer-send-to-main"
+      @click="events.emitTo('main', CHANNEL.RENDERER_SEND_TO_MAIN)"
+    >
       Send events to the main process
     </button>
     <button

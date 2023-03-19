@@ -2,7 +2,7 @@ import { _electron as electron } from 'playwright';
 import { test } from '@playwright/test';
 import { resolve } from './utils';
 import { testFirstPage } from './page';
-import { testRendererSendToSelf } from './broadcast';
+import { testRendererSendToSelf, testRendererSendToMain } from './broadcast';
 import { TestContext } from './test';
 
 const testCtx = {} as TestContext;
@@ -40,6 +40,7 @@ const main = async () => {
   // test cases
   testFirstPage(testCtx);
   testRendererSendToSelf(testCtx);
+  testRendererSendToMain(testCtx);
 };
 
 main();

@@ -1,9 +1,17 @@
 import { join } from 'path';
 import { BrowserWindow } from 'electron';
 import { useEvents, useWindowPool } from '@core/index';
-import { CREATE_WINDOW, getDebug, SAY_HI, TEST_CHANNEL } from '../utils';
+import {
+  CHANNEL,
+  CREATE_WINDOW,
+  getDebug,
+  SAY_HI,
+  TEST_CHANNEL
+} from '../utils';
+import { windowPool } from '@core/base';
 
 export const preload = join(__dirname, './preload.js');
+const setTitle = (title: string) => `document.title = ${title}`;
 
 export interface WindowInfo {
   name: string;
@@ -40,8 +48,14 @@ events.on(SAY_HI, () => {
   debug('self', 'Received a message from yourself on channel sayHi.');
 });
 
-events.on('App', SAY_HI, () => {
-  debug('App', 'Received a message from app on channel sayHi.');
+events.on('App', CHANNEL.RENDERER_SEND_TO_MAIN, () => {
+  const win = windowPool.get('App');
+
+  win?.webContents.executeJavaScript(setTitle(CHANNEL.RENDERER_SEND_TO_MAIN));
+  debug(
+    'App',
+    `Received a message from app on channel ${CHANNEL.RENDERER_SEND_TO_MAIN}.`
+  );
 });
 
 events.on(['App', 'Bramble'], SAY_HI, () => {
