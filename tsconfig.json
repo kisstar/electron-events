@@ -10,14 +10,17 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "esModuleInterop": true,
-    "noEmit": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noImplicitReturns": true,
+    "emitDeclarationOnly": true,
+    "declaration": true,
+    "declarationDir": "dist-electron/types",
     "skipLibCheck": true,
     "paths": {
       "@core/*": ["./packages/core/*"],
       "@demo/*": ["./packages/demo/*"]
     }
-  }
+  },
+  "include": ["typings", "./packages/core"]
 }

@@ -3,19 +3,22 @@
   "version": "1.0.0",
   "description": "Provide single point and broadcast event system.",
   "main": "dist-electron/index.js",
+  "module": "dist-electron/index.mjs",
+  "types": "dist-electron/types",
   "scripts": {
     "dev": "vite",
     "test": "NODE_ENV=test npm run build && playwright test",
-    "build": "vue-tsc && vite build"
+    "build": "vue-tsc && vite build && tsc"
   },
   "dependencies": {
-    "lodash": "^4.17.21",
+    "lodash-es": "^4.17.21",
     "vue": "^3.2.47",
     "vue-router": "4"
   },
   "devDependencies": {
     "@playwright/test": "^1.31.2",
     "@types/lodash": "^4.14.191",
+    "@types/node": "^18.15.0",
     "@vitejs/plugin-vue": "^4.0.0",
     "electron": "^23.1.0",
     "playwright": "^1.31.2",
