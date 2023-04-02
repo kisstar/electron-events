@@ -1,19 +1,19 @@
 <script setup lang="ts">
 import { onMounted } from 'vue';
 import { useEvents } from '../hooks';
-import { CHANNEL, getDebug, SAY_HI, setTitle, WINDOW_AMEM } from '../../utils';
+import { CHANNEL, getDebug, SAY_HI, setTitle, WINDOW_NAME } from '../../utils';
 
-const debug = getDebug(WINDOW_AMEM.BRAMBLE);
+const debug = getDebug(WINDOW_NAME.BRAMBLE);
 const events = useEvents();
 
 onMounted(() => {
-  setTitle(WINDOW_AMEM.BRAMBLE);
+  setTitle(WINDOW_NAME.BRAMBLE);
 });
 
-events.on(WINDOW_AMEM.APP, CHANNEL.RENDERER_SEND_ONE_TO_ONE, () => {
+events.on(WINDOW_NAME.APP, CHANNEL.RENDERER_SEND_ONE_TO_ONE, () => {
   setTitle(CHANNEL.RENDERER_SEND_ONE_TO_ONE);
   debug(
-    WINDOW_AMEM.APP,
+    WINDOW_NAME.APP,
     `Received a message from App on channel ${CHANNEL.RENDERER_SEND_ONE_TO_ONE}.`
   );
 });

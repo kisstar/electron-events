@@ -1,7 +1,7 @@
 import { type Page } from 'playwright';
 import { resolve as stlResolve } from 'path';
 import { WindowName } from '@demo/main/event';
-import { WINDOW_AMEM } from '@demo/utils';
+import { WINDOW_NAME } from '@demo/utils';
 import { TestContext } from './test';
 
 export const resolve = (...paths: string[]) =>
@@ -60,7 +60,7 @@ export const getPage = async (
   const page = await electronApp.firstWindow();
   let newPage: Page | null = null;
 
-  if (windowName === WINDOW_AMEM.APP) {
+  if (windowName === WINDOW_NAME.APP) {
     newPage = page;
   } else {
     if (justWait) {
@@ -104,19 +104,25 @@ export const getPage = async (
 };
 
 export const getAppPage = async (testCtx: TestContext) => {
-  const appPage = await getPage(WINDOW_AMEM.APP, testCtx);
+  const appPage = await getPage(WINDOW_NAME.APP, testCtx);
 
   return appPage as Page;
 };
 
 export const getBramblePage = async (testCtx: TestContext) => {
-  const bramblePage = await getPage(WINDOW_AMEM.BRAMBLE, testCtx);
+  const bramblePage = await getPage(WINDOW_NAME.BRAMBLE, testCtx);
 
   return bramblePage as Page;
 };
 
+export const getBriarPage = async (testCtx: TestContext) => {
+  const briarlePage = await getPage(WINDOW_NAME.BRIAR, testCtx);
+
+  return briarlePage as Page;
+};
+
 export const getAppWindowID = async (testCtx: TestContext) => {
-  const appWindowID = await getPage(WINDOW_AMEM.APP, testCtx, {
+  const appWindowID = await getPage(WINDOW_NAME.APP, testCtx, {
     isWindow: true
   });
 
@@ -124,7 +130,7 @@ export const getAppWindowID = async (testCtx: TestContext) => {
 };
 
 export const getBrambleWindowID = async (testCtx: TestContext) => {
-  const brambleWindowID = await getPage(WINDOW_AMEM.BRAMBLE, testCtx, {
+  const brambleWindowID = await getPage(WINDOW_NAME.BRAMBLE, testCtx, {
     isWindow: true
   });
 

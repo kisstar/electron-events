@@ -5,7 +5,7 @@ import { TestChannelInfo, WindowInfo } from '@demo/main/event';
 import { useEvents } from '@demo/renderer/hooks';
 import { windowList } from '@demo/renderer/config';
 import {
-  WINDOW_AMEM,
+  WINDOW_NAME,
   CHANNEL,
   SAY_HI,
   TEST_CHANNEL,
@@ -14,7 +14,7 @@ import {
 } from '@demo/utils';
 import { mainButtonList } from './constants';
 
-const debug = getDebug(WINDOW_AMEM.APP);
+const debug = getDebug(WINDOW_NAME.APP);
 const events = useEvents();
 const downtimeWindowList = computed(() =>
   windowList.filter(win => win.status !== 'lock')
@@ -28,7 +28,7 @@ const sendWindowEvent = (windowInfo: WindowInfo) => {
       events.emit(CHANNEL.RENDERER_SEND_TO_SELF);
       break;
     case 'Bramble':
-      events.emitTo(WINDOW_AMEM.BRAMBLE, CHANNEL.RENDERER_SEND_ONE_TO_ONE);
+      events.emitTo(WINDOW_NAME.BRAMBLE, CHANNEL.RENDERER_SEND_ONE_TO_ONE);
       break;
     default:
       events.emitTo(windowInfo.name, SAY_HI);
@@ -45,7 +45,7 @@ const triggerMainEventn = (params: TestChannelInfo) => {
 };
 
 onMounted(() => {
-  setTitle(WINDOW_AMEM.APP);
+  setTitle(WINDOW_NAME.APP);
 });
 
 events.on(CHANNEL.RENDERER_SEND_TO_SELF, () => {

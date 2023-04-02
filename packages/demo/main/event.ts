@@ -3,7 +3,7 @@ import { BrowserWindow, ipcMain } from 'electron';
 import { useEvents, useWindowPool } from '@core/index';
 import { windowPool } from '@core/base';
 import {
-  WINDOW_AMEM,
+  WINDOW_NAME,
   CHANNEL,
   getDebug,
   SAY_HI,
@@ -11,7 +11,7 @@ import {
   TestChannelType
 } from '../utils';
 
-export type WindowName = `${WINDOW_AMEM}`;
+export type WindowName = `${WINDOW_NAME}`;
 
 export interface WindowInfo {
   name: WindowName;

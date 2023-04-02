@@ -1,7 +1,11 @@
 import { _electron as electron } from 'playwright';
 import { test } from '@playwright/test';
 import { resolve } from './utils';
-import { testFirstPage, testCreateBrambleWindow } from './page';
+import {
+  testFirstPage,
+  testCreateBrambleWindow,
+  testCreateBriarWindow
+} from './page';
 import {
   testRendererSendToSelf,
   testRendererSendToMain,
@@ -47,6 +51,7 @@ const main = async () => {
   // test cases
   testFirstPage(testCtx);
   testCreateBrambleWindow(testCtx);
+  testCreateBriarWindow(testCtx);
   testRendererSendToSelf(testCtx);
   testRendererSendToMain(testCtx);
   testRendererSendToOne(testCtx);

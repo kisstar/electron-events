@@ -2,7 +2,7 @@ import { release } from 'os';
 import { join } from 'path';
 import { app, BrowserWindow } from 'electron';
 import { useWindowPool } from '@core/index';
-import { WINDOW_AMEM } from '@demo/utils';
+import { WINDOW_NAME } from '@demo/utils';
 import { preload } from './event';
 
 process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true';
@@ -26,12 +26,12 @@ async function createWindow() {
   const windowPool = useWindowPool();
 
   win = new BrowserWindow({
-    title: WINDOW_AMEM.APP,
+    title: WINDOW_NAME.APP,
     webPreferences: {
       preload
     }
   });
-  windowPool.add(WINDOW_AMEM.APP, win);
+  windowPool.add(WINDOW_NAME.APP, win);
 
   if (url) {
     win.loadURL(url);
