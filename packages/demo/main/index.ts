@@ -2,7 +2,10 @@ import { release } from 'os';
 import { join } from 'path';
 import { app, BrowserWindow } from 'electron';
 import { useWindowPool } from '@core/index';
+import { WINDOW_AMEM } from '@demo/utils';
 import { preload } from './event';
+
+process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true';
 
 // Disable GPU Acceleration for Windows 7
 if (release().startsWith('6.1')) app.disableHardwareAcceleration();
@@ -23,12 +26,12 @@ async function createWindow() {
   const windowPool = useWindowPool();
 
   win = new BrowserWindow({
-    title: 'Electron Events',
+    title: WINDOW_AMEM.APP,
     webPreferences: {
       preload
     }
   });
-  windowPool.add('App', win);
+  windowPool.add(WINDOW_AMEM.APP, win);
 
   if (url) {
     win.loadURL(url);

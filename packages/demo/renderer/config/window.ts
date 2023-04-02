@@ -1,22 +1,26 @@
 import { WindowInfo } from '../../main/event';
 
+const herf = location.protocol.startsWith('file')
+  ? location.origin + location.pathname
+  : location.origin;
+
 export const windowList: WindowInfo[] = [
   {
     name: 'App',
     rendererSendId: 'renderer-send-to-app',
-    url: `${location.origin}/`,
+    url: `${herf}`,
     status: 'lock'
   },
   {
     name: 'Bramble',
     rendererSendId: 'renderer-send-to-bramble',
-    url: `${location.origin}/#bramble`,
+    url: `${herf}#bramble`,
     status: 'normal'
   },
   {
     name: 'Briar',
     rendererSendId: 'renderer-send-to-briar',
-    url: `${location.origin}/#briar`,
+    url: `${herf}#briar`,
     status: 'normal'
   }
 ];

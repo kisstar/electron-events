@@ -1,34 +1,38 @@
 <script setup lang="ts">
 import { onMounted, computed } from 'vue';
 import { MAIN_EVENT_NAME } from '@core/utils';
-import { useEvents } from '../../hooks';
-import { windowList } from '../../config';
+import { TestChannelInfo, WindowInfo } from '@demo/main/event';
+import { useEvents } from '@demo/renderer/hooks';
+import { windowList } from '@demo/renderer/config';
 import {
+  WINDOW_AMEM,
   CHANNEL,
-  CREATE_WINDOW,
   SAY_HI,
   TEST_CHANNEL,
   getDebug,
   setTitle
-} from '../../../utils';
-import { TestChannelInfo, WindowInfo } from '../../../main/event';
+} from '@demo/utils';
 import { mainButtonList } from './constants';
 
-const debug = getDebug('App');
+const debug = getDebug(WINDOW_AMEM.APP);
 const events = useEvents();
 const downtimeWindowList = computed(() =>
   windowList.filter(win => win.status !== 'lock')
 );
 const createWindow = (windowInfo: WindowInfo) => {
-  events.emitTo(MAIN_EVENT_NAME, CREATE_WINDOW, windowInfo);
+  window.electronAPI.createWindow(windowInfo);
 };
 const sendWindowEvent = (windowInfo: WindowInfo) => {
-  if ('App' === windowInfo.name) {
-    events.emit(CHANNEL.RENDERER_SEND_TO_SELF);
-    return;
+  switch (windowInfo.name) {
+    case 'App':
+      events.emit(CHANNEL.RENDERER_SEND_TO_SELF);
+      break;
+    case 'Bramble':
+      events.emitTo(WINDOW_AMEM.BRAMBLE, CHANNEL.RENDERER_SEND_ONE_TO_ONE);
+      break;
+    default:
+      events.emitTo(windowInfo.name, SAY_HI);
   }
-
-  events.emitTo(windowInfo.name, SAY_HI);
 };
 const sendWindowsEvent = () => {
   events.emitTo(
@@ -41,7 +45,7 @@ const triggerMainEventn = (params: TestChannelInfo) => {
 };
 
 onMounted(() => {
-  document.title = 'Electron Events';
+  setTitle(WINDOW_AMEM.APP);
 });
 
 events.on(CHANNEL.RENDERER_SEND_TO_SELF, () => {
@@ -64,6 +68,7 @@ events.on(MAIN_EVENT_NAME, SAY_HI, () => {
   <p>
     <button
       v-for="windowInfo in downtimeWindowList"
+      :id="`create-${windowInfo.name}`"
       @click="createWindow(windowInfo)"
     >
       {{ `Create a ${windowInfo.name} window` }}

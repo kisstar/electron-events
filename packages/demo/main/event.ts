@@ -1,48 +1,79 @@
 import { join } from 'path';
-import { BrowserWindow } from 'electron';
+import { BrowserWindow, ipcMain } from 'electron';
 import { useEvents, useWindowPool } from '@core/index';
+import { windowPool } from '@core/base';
 import {
+  WINDOW_AMEM,
   CHANNEL,
-  CREATE_WINDOW,
   getDebug,
   SAY_HI,
-  TEST_CHANNEL
+  TEST_CHANNEL,
+  TestChannelType
 } from '../utils';
-import { windowPool } from '@core/base';
 
-export const preload = join(__dirname, './preload.js');
-const setTitle = (title: string) => `document.title = ${title}`;
+export type WindowName = `${WINDOW_AMEM}`;
 
 export interface WindowInfo {
-  name: string;
-  rendererSendId: string;
+  name: WindowName;
+  rendererSendId:
+    | 'renderer-send-to-app'
+    | 'renderer-send-to-bramble'
+    | 'renderer-send-to-briar';
   url: string;
   status: 'normal' | 'lock';
 }
+
+type TestChannelPayload =
+  | {
+      type: TestChannelType.GET_WINDOW_ID;
+      name: string;
+    }
+  | {
+      type: TestChannelType.CREATE_WINDOW;
+      windowInfo: WindowInfo;
+    };
+
+export const preload = join(__dirname, './preload.js');
+const debug = getDebug('Main');
+const events = useEvents();
+const setTitle = (title: string) => `document.title = ${title}`;
+
+ipcMain.handle(TEST_CHANNEL, (_, payload: TestChannelPayload) => {
+  const { type } = payload;
+  const windowPool = useWindowPool();
+
+  switch (type) {
+    case TestChannelType.GET_WINDOW_ID: {
+      const { name } = payload;
+      const window = windowPool.get(name);
+
+      return window ? window.id : -1;
+    }
+    case TestChannelType.CREATE_WINDOW: {
+      const { windowInfo } = payload;
+      const { name, url } = windowInfo;
+      const win = new BrowserWindow({
+        title: name,
+        webPreferences: {
+          preload
+        }
+      });
+
+      win.loadURL(url);
+      win.webContents.openDevTools();
+      windowPool.add(name, win);
+      return win.id;
+    }
+    default:
+      return;
+  }
+});
 
 export type TestChannel = 'own' | 'someone' | 'several' | 'all';
 
 export interface TestChannelInfo {
   type: TestChannel;
 }
-
-const debug = getDebug('Main');
-const events = useEvents();
-
-events.on('App', CREATE_WINDOW, (windowInfo: WindowInfo) => {
-  const windowPool = useWindowPool();
-  const { name, url } = windowInfo;
-  const win = new BrowserWindow({
-    title: name,
-    webPreferences: {
-      preload
-    }
-  });
-
-  win.loadURL(url);
-  win.webContents.openDevTools();
-  windowPool.add(name, win);
-});
 
 events.on(SAY_HI, () => {
   debug('self', 'Received a message from yourself on channel sayHi.');

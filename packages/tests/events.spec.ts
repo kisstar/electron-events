@@ -1,11 +1,18 @@
 import { _electron as electron } from 'playwright';
 import { test } from '@playwright/test';
 import { resolve } from './utils';
-import { testFirstPage } from './page';
-import { testRendererSendToSelf, testRendererSendToMain } from './broadcast';
+import { testFirstPage, testCreateBrambleWindow } from './page';
+import {
+  testRendererSendToSelf,
+  testRendererSendToMain,
+  testRendererSendToOne
+} from './broadcast';
 import { TestContext } from './test';
 
-const testCtx = {} as TestContext;
+const testCtx = {
+  pageMap: {},
+  windowIDMap: {}
+} as TestContext;
 
 test.beforeAll(async () => {
   const electronApp = await electron.launch({
@@ -39,8 +46,10 @@ test.afterAll(async () => {
 const main = async () => {
   // test cases
   testFirstPage(testCtx);
+  testCreateBrambleWindow(testCtx);
   testRendererSendToSelf(testCtx);
   testRendererSendToMain(testCtx);
+  testRendererSendToOne(testCtx);
 };
 
 main();
