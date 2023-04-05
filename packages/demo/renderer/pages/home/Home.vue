@@ -108,7 +108,10 @@ events.on(MAIN_EVENT_NAME, SAY_HI, () => {
     <button id="renderer-send-to-several" @click="sendWindowsEvent()">
       Send events to Bramble and Briar window
     </button>
-    <button @click="events.emitTo('*', SAY_HI)">
+    <button
+      id="renderer-send-to-all"
+      @click="events.emitTo('*', CHANNEL.RENDERER_SEND_ONE_TO_ALL)"
+    >
       Send events to main process and other windows
     </button>
   </p>

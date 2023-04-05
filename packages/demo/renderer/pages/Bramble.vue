@@ -24,6 +24,13 @@ events.on(WINDOW_NAME.APP, CHANNEL.RENDERER_SEND_ONE_TO_SEVERAL, () => {
     `Received a message from ${WINDOW_NAME.APP} on channel ${CHANNEL.RENDERER_SEND_ONE_TO_SEVERAL}.`
   );
 });
+events.on(WINDOW_NAME.APP, CHANNEL.RENDERER_SEND_ONE_TO_ALL, () => {
+  setTitle(CHANNEL.RENDERER_SEND_ONE_TO_ALL);
+  debug(
+    WINDOW_NAME.APP,
+    `Received a message from ${WINDOW_NAME.APP} on channel ${CHANNEL.RENDERER_SEND_ONE_TO_ALL}.`
+  );
+});
 events.on('*', SAY_HI, () => {
   debug('*', 'Received a mass message on channel sayHi.');
 });

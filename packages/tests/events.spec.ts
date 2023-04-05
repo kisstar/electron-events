@@ -10,7 +10,8 @@ import {
   testRendererSendToSelf,
   testRendererSendToMain,
   testRendererSendToOne,
-  testRendererSendToSeveral
+  testRendererSendToSeveral,
+  testRendererSendToAll
 } from './broadcast';
 import { TestContext } from './test';
 
@@ -57,6 +58,7 @@ const main = async () => {
   testRendererSendToMain(testCtx);
   testRendererSendToOne(testCtx);
   testRendererSendToSeveral(testCtx);
+  testRendererSendToAll(testCtx);
 };
 
 main();
