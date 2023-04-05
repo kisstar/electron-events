@@ -9,7 +9,8 @@ export const enum WINDOW_NAME {
 export const enum CHANNEL {
   RENDERER_SEND_TO_SELF = '0',
   RENDERER_SEND_TO_MAIN = '1',
-  RENDERER_SEND_ONE_TO_ONE = '2'
+  RENDERER_SEND_ONE_TO_ONE = '2',
+  RENDERER_SEND_ONE_TO_SEVERAL = '3'
 }
 
 export const enum TestChannelType {

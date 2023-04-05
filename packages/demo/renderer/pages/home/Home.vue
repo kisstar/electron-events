@@ -37,7 +37,7 @@ const sendWindowEvent = (windowInfo: WindowInfo) => {
 const sendWindowsEvent = () => {
   events.emitTo(
     downtimeWindowList.value.map(win => win.name),
-    SAY_HI
+    CHANNEL.RENDERER_SEND_ONE_TO_SEVERAL
   );
 };
 const triggerMainEventn = (params: TestChannelInfo) => {
@@ -105,7 +105,7 @@ events.on(MAIN_EVENT_NAME, SAY_HI, () => {
 
   <h3>Broadcast events</h3>
   <p>
-    <button @click="sendWindowsEvent()">
+    <button id="renderer-send-to-several" @click="sendWindowsEvent()">
       Send events to Bramble and Briar window
     </button>
     <button @click="events.emitTo('*', SAY_HI)">

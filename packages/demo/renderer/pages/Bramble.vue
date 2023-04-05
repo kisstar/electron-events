@@ -14,7 +14,14 @@ events.on(WINDOW_NAME.APP, CHANNEL.RENDERER_SEND_ONE_TO_ONE, () => {
   setTitle(CHANNEL.RENDERER_SEND_ONE_TO_ONE);
   debug(
     WINDOW_NAME.APP,
-    `Received a message from App on channel ${CHANNEL.RENDERER_SEND_ONE_TO_ONE}.`
+    `Received a message from ${WINDOW_NAME.APP} on channel ${CHANNEL.RENDERER_SEND_ONE_TO_ONE}.`
+  );
+});
+events.on(WINDOW_NAME.APP, CHANNEL.RENDERER_SEND_ONE_TO_SEVERAL, () => {
+  setTitle(CHANNEL.RENDERER_SEND_ONE_TO_SEVERAL);
+  debug(
+    WINDOW_NAME.APP,
+    `Received a message from ${WINDOW_NAME.APP} on channel ${CHANNEL.RENDERER_SEND_ONE_TO_SEVERAL}.`
   );
 });
 events.on('*', SAY_HI, () => {

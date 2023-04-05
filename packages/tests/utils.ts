@@ -35,7 +35,7 @@ const getWindowID = async (windowName: WindowName, testCtx: TestContext) => {
   return windowID;
 };
 
-export const getPage = async (
+const getPage = async (
   windowName: WindowName,
   testCtx: TestContext,
   options: GetPageOptions = {}
@@ -103,6 +103,32 @@ export const getPage = async (
   return isWindow ? windowIDMap[windowName] : newPage;
 };
 
+export const getTileOnChanged = (
+  brambleWinodwID: number,
+  testCtx: TestContext
+) => {
+  const { electronApp } = testCtx;
+
+  return electronApp.evaluate(
+    ({ BrowserWindow }, { brambleWinodwID }) => {
+      const window = BrowserWindow.getAllWindows().find(
+        window => brambleWinodwID === window.id
+      );
+
+      return new Promise((resolve, reject) => {
+        if (!window) {
+          return reject('');
+        }
+
+        window.on('page-title-updated', (_, title) => resolve(title));
+      });
+    },
+    {
+      brambleWinodwID
+    }
+  );
+};
+
 export const getAppPage = async (testCtx: TestContext) => {
   const appPage = await getPage(WINDOW_NAME.APP, testCtx);
 
@@ -135,4 +161,12 @@ export const getBrambleWindowID = async (testCtx: TestContext) => {
   });
 
   return brambleWindowID as number;
+};
+
+export const getBriarWindowID = async (testCtx: TestContext) => {
+  const briarWindowID = await getPage(WINDOW_NAME.BRIAR, testCtx, {
+    isWindow: true
+  });
+
+  return briarWindowID as number;
 };
