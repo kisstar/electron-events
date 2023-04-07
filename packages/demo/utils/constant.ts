@@ -15,8 +15,6 @@ export const enum CHANNEL {
 }
 
 export const enum TestChannelType {
-  GET_WINDOW_ID,
-  CREATE_WINDOW
+  CREATE_WINDOW,
+  TEST_HANDLE
 }
-
-export const SAY_HI = 'SAY_HI';

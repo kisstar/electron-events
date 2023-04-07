@@ -7,7 +7,6 @@ import { windowList } from '@demo/renderer/config';
 import {
   WINDOW_NAME,
   CHANNEL,
-  SAY_HI,
   TEST_CHANNEL,
   getDebug,
   setTitle
@@ -31,7 +30,6 @@ const sendWindowEvent = (windowInfo: WindowInfo) => {
       events.emitTo(WINDOW_NAME.BRAMBLE, CHANNEL.RENDERER_SEND_ONE_TO_ONE);
       break;
     default:
-      events.emitTo(windowInfo.name, SAY_HI);
   }
 };
 const sendWindowsEvent = () => {
@@ -53,12 +51,6 @@ events.on(CHANNEL.RENDERER_SEND_TO_SELF, () => {
   debug(
     'self',
     `Received a message from yourself on channel ${CHANNEL.RENDERER_SEND_TO_SELF}.`
-  );
-});
-events.on(MAIN_EVENT_NAME, SAY_HI, () => {
-  debug(
-    MAIN_EVENT_NAME,
-    'Received a message from the main process on channel sayHi.'
   );
 });
 </script>

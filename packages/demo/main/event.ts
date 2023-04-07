@@ -6,7 +6,6 @@ import {
   WINDOW_NAME,
   CHANNEL,
   getDebug,
-  SAY_HI,
   TEST_CHANNEL,
   TestChannelType
 } from '../utils';
@@ -23,14 +22,20 @@ export interface WindowInfo {
   status: 'normal' | 'lock';
 }
 
+export type TestChannel = 'own' | 'someone' | 'several' | 'all';
+
+export interface TestChannelInfo {
+  type: TestChannel;
+}
+
 type TestChannelPayload =
-  | {
-      type: TestChannelType.GET_WINDOW_ID;
-      name: string;
-    }
   | {
       type: TestChannelType.CREATE_WINDOW;
       windowInfo: WindowInfo;
+    }
+  | {
+      type: TestChannelType.TEST_HANDLE;
+      channelInfo: TestChannelInfo;
     };
 
 export const preload = join(__dirname, './preload.js');
@@ -38,17 +43,20 @@ const debug = getDebug('Main');
 const events = useEvents();
 const setTitle = (title: string) => `document.title = ${title}`;
 
+function testHandler(params: TestChannelInfo) {
+  const { type } = params;
+
+  switch (type) {
+    default:
+      debug('*', 'No matching operation.');
+  }
+}
+
 ipcMain.handle(TEST_CHANNEL, (_, payload: TestChannelPayload) => {
   const { type } = payload;
   const windowPool = useWindowPool();
 
   switch (type) {
-    case TestChannelType.GET_WINDOW_ID: {
-      const { name } = payload;
-      const window = windowPool.get(name);
-
-      return window ? window.id : -1;
-    }
     case TestChannelType.CREATE_WINDOW: {
       const { windowInfo } = payload;
       const { name, url } = windowInfo;
@@ -64,19 +72,11 @@ ipcMain.handle(TEST_CHANNEL, (_, payload: TestChannelPayload) => {
       windowPool.add(name, win);
       return win.id;
     }
+    case TestChannelType.TEST_HANDLE:
+      return testHandler(payload.channelInfo);
     default:
       return;
   }
-});
-
-export type TestChannel = 'own' | 'someone' | 'several' | 'all';
-
-export interface TestChannelInfo {
-  type: TestChannel;
-}
-
-events.on(SAY_HI, () => {
-  debug('self', 'Received a message from yourself on channel sayHi.');
 });
 
 events.on(WINDOW_NAME.APP, CHANNEL.RENDERER_SEND_TO_MAIN, () => {
@@ -99,36 +99,4 @@ events.on(WINDOW_NAME.APP, CHANNEL.RENDERER_SEND_ONE_TO_ALL, () => {
     WINDOW_NAME.APP,
     `Received a message from ${WINDOW_NAME.APP} on channel ${CHANNEL.RENDERER_SEND_ONE_TO_ALL}.`
   );
-});
-
-events.on(['App', 'Bramble'], SAY_HI, () => {
-  debug(
-    ['App', 'Bramble'].join('|'),
-    'Received information on channel sayHi in the specified window list.'
-  );
-});
-
-events.on('*', SAY_HI, () => {
-  debug('*', 'Received a mass message on channel sayHi.');
-});
-
-events.on('*', TEST_CHANNEL, (params: TestChannelInfo) => {
-  const { type } = params;
-
-  switch (type) {
-    case 'own':
-      events.emit(SAY_HI);
-      break;
-    case 'someone':
-      events.emitTo('App', SAY_HI);
-      break;
-    case 'several':
-      events.emitTo(['App', 'Bramble'], SAY_HI);
-      break;
-    case 'all':
-      events.emitTo('*', SAY_HI);
-      break;
-    default:
-      debug('*', 'No matching operation.');
-  }
 });
