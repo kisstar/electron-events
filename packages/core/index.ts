@@ -1,13 +1,12 @@
 import { bind } from 'lodash';
 import { MainIpcEvents, RendererIpcEvents } from './events';
-import { windowPool } from './base';
 
 type EventMethod = keyof RendererIpcEvents;
 
 let mainEvents: MainIpcEvents | null = null;
 let rendererEvents: RendererIpcEvents | null = null;
 
-export const useWindowPool = () => windowPool;
+export { useWindowPool } from './base';
 
 export const useEvents = () => {
   if ('browser' === process.type) {
@@ -25,8 +24,11 @@ export const useEvents = () => {
       'emit',
       'emitTo',
       'off',
+      'handle',
+      'handleOnce',
       'invoke',
-      'invokeTo'
+      'invokeTo',
+      'removeHandler'
     ];
 
     rendererEvents = new RendererIpcEvents();

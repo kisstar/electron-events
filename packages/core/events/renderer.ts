@@ -50,7 +50,10 @@ export class RendererIpcEvents extends IpcEvents {
 
       const resArr = eventName.map(async evName => {
         const resEventName = this._getEventName(fromName, evName);
-        const handler = this.responsiveEventMap.get(resEventName);
+        const anyEventName = this._getEventName(ANY_WINDOW_SYMBOL, evName);
+        const handler =
+          this.responsiveEventMap.get(resEventName) ||
+          this.responsiveEventMap.get(anyEventName);
 
         if (!isFunction(handler)) {
           return Promise.reject({
@@ -96,44 +99,6 @@ export class RendererIpcEvents extends IpcEvents {
       eventName,
       payload: args
     });
-  }
-
-  async invoke<T = any>(
-    eventName: string | string[],
-    ...args: any[]
-  ): Promise<T | T[]> {
-    const isMultipleEvents = isArray(eventName);
-
-    if (!isArray(eventName)) {
-      eventName = [eventName];
-    }
-
-    const resArr = eventName.map(async evName => {
-      const handler = this.responsiveEventMap.get(evName);
-
-      if (!isFunction(handler)) {
-        return Promise.reject({
-          code: ErrorCode.NOT_FOUNT,
-          message: new Error(
-            `Error occurred in handler for '${evName}': No handler registered for '${evName}'`
-          )
-        });
-      }
-
-      try {
-        return await handler(...args);
-      } catch (error) {
-        return {
-          code: ErrorCode.EXECUTION_EXCEPTION,
-          message: new Error(
-            `Error occurred in handler for '${evName}': Execution exception'`
-          ),
-          payload: error
-        };
-      }
-    });
-
-    return isMultipleEvents ? Promise.all(resArr) : resArr[0];
   }
 
   invokeTo<T = any>(
