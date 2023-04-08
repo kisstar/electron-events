@@ -10,7 +10,20 @@ interface NormalizeOnArg {
 
 export class IpcEvents {
   protected eventMap = new EventEmitter();
-  protected responsiveEventMap = new Map<string, AnyFunction>();
+  protected responsiveEventStore: {
+    [key: string]: AnyFunction;
+  } = Object.create(null);
+  protected responsiveEventMap = {
+    set: (name: string, listener: AnyFunction) => {
+      this.responsiveEventStore[name] = listener;
+    },
+    get: (name: string): AnyFunction | undefined => {
+      return this.responsiveEventStore[name];
+    },
+    delete: (name: string) => {
+      delete this.responsiveEventStore[name];
+    }
+  };
 
   on(eventName: string | string[], listener: AnyFunction): this;
   on(
@@ -251,10 +264,7 @@ export class IpcEvents {
     return this;
   }
 
-  async invoke<T = any>(
-    eventName: string | string[],
-    ...args: any[]
-  ): Promise<T | T[]> {
+  async invoke(eventName: string | string[], ...args: any[]) {
     // We will process the parameters received from the user in the form of an array
     // and determine the return value based on the actual number of parameters.
     const isMultipleEvents = isArray(eventName);

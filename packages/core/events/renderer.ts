@@ -101,11 +101,11 @@ export class RendererIpcEvents extends IpcEvents {
     });
   }
 
-  invokeTo<T = any>(
+  invokeTo(
     windowName: string | string[],
     eventName: string | string[],
     ...args: any[]
-  ): Promise<T> {
+  ) {
     return ipcRenderer.invoke(EVENT_CENTER, {
       type: EventType.RESPONSIVE,
       toName: windowName,
