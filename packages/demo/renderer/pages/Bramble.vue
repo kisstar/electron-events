@@ -31,6 +31,14 @@ events.on(WINDOW_NAME.APP, CHANNEL.RENDERER_SEND_ONE_TO_ALL, () => {
     `Received a message from ${WINDOW_NAME.APP} on channel ${CHANNEL.RENDERER_SEND_ONE_TO_ALL}.`
   );
 });
+events.handle(WINDOW_NAME.APP, CHANNEL.RENDERER_INVOKE_ONE_TO_ONE, () => {
+  debug(
+    WINDOW_NAME.APP,
+    `Received a message from ${WINDOW_NAME.APP} on channel ${CHANNEL.RENDERER_INVOKE_ONE_TO_ONE}.`
+  );
+
+  return CHANNEL.RENDERER_INVOKE_ONE_TO_ONE;
+});
 </script>
 
 <template>

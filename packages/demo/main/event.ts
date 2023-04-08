@@ -104,3 +104,12 @@ events.on(WINDOW_NAME.APP, CHANNEL.RENDERER_SEND_ONE_TO_ALL, () => {
     `Received a message from ${WINDOW_NAME.APP} on channel ${CHANNEL.RENDERER_SEND_ONE_TO_ALL}.`
   );
 });
+
+events.handle(WINDOW_NAME.APP, CHANNEL.RENDERER_INVOKE_TO_MAIN, () => {
+  debug(
+    WINDOW_NAME.APP,
+    `Received a message from ${WINDOW_NAME.APP} on channel ${CHANNEL.RENDERER_INVOKE_TO_MAIN}.`
+  );
+
+  return CHANNEL.RENDERER_INVOKE_TO_MAIN;
+});

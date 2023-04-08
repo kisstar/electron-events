@@ -19,7 +19,7 @@ export async function testRendererSendToSelf(testCtx: TestContext) {
 }
 
 export async function testRendererSendToMain(testCtx: TestContext) {
-  test('sends events to the main process', async () => {
+  test('send events to the main process', async () => {
     const page = await getAppPage(testCtx);
     const appWinodwID = await getAppWindowID(testCtx);
     const titlePromise = getTileOnChanged(appWinodwID, testCtx);

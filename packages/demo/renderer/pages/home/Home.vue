@@ -33,9 +33,18 @@ const sendWindowEvent = (windowInfo: WindowInfo) => {
   }
 };
 const invokeWindowEvent = async (windowInfo: WindowInfo) => {
+  let title = '';
+
   switch (windowInfo.name) {
-    case 'App':
-      const title = await events.invoke(CHANNEL.RENDERER_INVOKE_TO_SELF);
+    case WINDOW_NAME.APP:
+      title = await events.invoke(CHANNEL.RENDERER_INVOKE_TO_SELF);
+      setTitle(title);
+      break;
+    case WINDOW_NAME.BRAMBLE:
+      title = await events.invokeTo(
+        WINDOW_NAME.BRAMBLE,
+        CHANNEL.RENDERER_INVOKE_ONE_TO_ONE
+      );
       setTitle(title);
       break;
     default:
@@ -47,7 +56,12 @@ const sendWindowsEvent = () => {
     CHANNEL.RENDERER_SEND_ONE_TO_SEVERAL
   );
 };
-const triggerMainEventn = (params: TestChannelInfo) => {
+const invokeMainEvent = async () => {
+  const title = await events.invokeTo('main', CHANNEL.RENDERER_INVOKE_TO_MAIN);
+
+  setTitle(title);
+};
+const triggerMainEvent = (params: TestChannelInfo) => {
   events.emitTo(MAIN_EVENT_NAME, TEST_CHANNEL, params);
 };
 
@@ -92,7 +106,7 @@ events.handle(CHANNEL.RENDERER_INVOKE_TO_SELF, () => {
       v-for="{ type, content } in mainButtonList"
       :key="type"
       disabled
-      @click="triggerMainEventn({ type })"
+      @click="triggerMainEvent({ type })"
     >
       {{ content }}
     </button>
@@ -132,6 +146,9 @@ events.handle(CHANNEL.RENDERER_INVOKE_TO_SELF, () => {
 
   <h3>Invoke Events</h3>
   <p>
+    <button id="renderer-invoke-to-main" @click="invokeMainEvent">
+      Invoke events to the main process
+    </button>
     <button
       v-for="windowInfo in windowList"
       :id="windowInfo.rendererInvokeId"

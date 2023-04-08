@@ -13,7 +13,11 @@ import {
   testRendererSendToSeveral,
   testRendererSendToAll
 } from './broadcast';
-import { testRendererInvokeToSelf } from './responsive';
+import {
+  testRendererInvokeToSelf,
+  testRendererInvokeToMain,
+  testRendererInvokeToOne
+} from './responsive';
 import { TestContext } from './test';
 
 const testCtx = {
@@ -62,6 +66,8 @@ const main = async () => {
   testRendererSendToAll(testCtx);
   // responsive mode
   testRendererInvokeToSelf(testCtx);
+  testRendererInvokeToMain(testCtx);
+  testRendererInvokeToOne(testCtx);
 };
 
 main();
