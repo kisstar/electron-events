@@ -32,6 +32,15 @@ const sendWindowEvent = (windowInfo: WindowInfo) => {
     default:
   }
 };
+const invokeWindowEvent = async (windowInfo: WindowInfo) => {
+  switch (windowInfo.name) {
+    case 'App':
+      const title = await events.invoke(CHANNEL.RENDERER_INVOKE_TO_SELF);
+      setTitle(title);
+      break;
+    default:
+  }
+};
 const sendWindowsEvent = () => {
   events.emitTo(
     downtimeWindowList.value.map(win => win.name),
@@ -53,6 +62,14 @@ events.on(CHANNEL.RENDERER_SEND_TO_SELF, () => {
     `Received a message from yourself on channel ${CHANNEL.RENDERER_SEND_TO_SELF}.`
   );
 });
+events.handle(CHANNEL.RENDERER_INVOKE_TO_SELF, () => {
+  debug(
+    'self',
+    `Received a message from yourself on channel ${CHANNEL.RENDERER_INVOKE_TO_SELF}.`
+  );
+
+  return CHANNEL.RENDERER_INVOKE_TO_SELF;
+});
 </script>
 
 <template>
@@ -67,11 +84,14 @@ events.on(CHANNEL.RENDERER_SEND_TO_SELF, () => {
     </button>
   </p>
 
+  <hr />
+
   <h3>Main process event</h3>
   <p>
     <button
       v-for="{ type, content } in mainButtonList"
       :key="type"
+      disabled
       @click="triggerMainEventn({ type })"
     >
       {{ content }}
@@ -107,14 +127,32 @@ events.on(CHANNEL.RENDERER_SEND_TO_SELF, () => {
       Send events to main process and other windows
     </button>
   </p>
+
+  <hr />
+
+  <h3>Invoke Events</h3>
+  <p>
+    <button
+      v-for="windowInfo in windowList"
+      :id="windowInfo.rendererInvokeId"
+      @click="invokeWindowEvent(windowInfo)"
+    >
+      {{ `Invoke events to ${windowInfo.name} window` }}
+    </button>
+  </p>
 </template>
 
 <style>
 button {
   margin-bottom: 16px;
+  cursor: pointer;
 }
 
 button:not(:first-child) {
   margin-left: 16px;
+}
+
+button:disabled {
+  cursor: not-allowed;
 }
 </style>

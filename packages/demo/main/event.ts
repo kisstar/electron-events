@@ -18,6 +18,10 @@ export interface WindowInfo {
     | 'renderer-send-to-app'
     | 'renderer-send-to-bramble'
     | 'renderer-send-to-briar';
+  rendererInvokeId:
+    | 'renderer-invoke-to-app'
+    | 'renderer-invoke-to-bramble'
+    | 'renderer-invoke-to-briar';
   url: string;
   status: 'normal' | 'lock';
 }

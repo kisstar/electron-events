@@ -11,7 +11,8 @@ export const enum CHANNEL {
   RENDERER_SEND_TO_MAIN = '1',
   RENDERER_SEND_ONE_TO_ONE = '2',
   RENDERER_SEND_ONE_TO_SEVERAL = '3',
-  RENDERER_SEND_ONE_TO_ALL = '4'
+  RENDERER_SEND_ONE_TO_ALL = '4',
+  RENDERER_INVOKE_TO_SELF = '5'
 }
 
 export const enum TestChannelType {
