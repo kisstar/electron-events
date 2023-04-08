@@ -44,7 +44,9 @@ export class MainIpcEvents extends IpcEvents {
         return;
       }
       if (ANY_WINDOW_SYMBOL === toName) {
-        toName = windowPool.getAllNames();
+        toName = windowPool
+          .getAllNames()
+          .filter(winName => winName !== windowName);
         toName.unshift(MAIN_EVENT_NAME);
       }
 
