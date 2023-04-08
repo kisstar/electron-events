@@ -39,6 +39,22 @@ events.handle(WINDOW_NAME.APP, CHANNEL.RENDERER_INVOKE_ONE_TO_ONE, () => {
 
   return CHANNEL.RENDERER_INVOKE_ONE_TO_ONE;
 });
+events.handle(WINDOW_NAME.APP, CHANNEL.RENDERER_INVOKE_ONE_TO_SEVERAL, () => {
+  debug(
+    WINDOW_NAME.APP,
+    `Received a message from ${WINDOW_NAME.APP} on channel ${CHANNEL.RENDERER_INVOKE_ONE_TO_SEVERAL}.`
+  );
+
+  return CHANNEL.RENDERER_INVOKE_ONE_TO_SEVERAL;
+});
+events.handle(WINDOW_NAME.APP, CHANNEL.RENDERER_INVOKE_ONE_TO_ALL, () => {
+  debug(
+    WINDOW_NAME.APP,
+    `Received a message from ${WINDOW_NAME.APP} on channel ${CHANNEL.RENDERER_INVOKE_ONE_TO_ALL}.`
+  );
+
+  return CHANNEL.RENDERER_INVOKE_ONE_TO_ALL;
+});
 </script>
 
 <template>

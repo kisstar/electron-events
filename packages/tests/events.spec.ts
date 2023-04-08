@@ -16,7 +16,9 @@ import {
 import {
   testRendererInvokeToSelf,
   testRendererInvokeToMain,
-  testRendererInvokeToOne
+  testRendererInvokeToOne,
+  testRendererInvokeToSeveral,
+  testRendererInvokeToAll
 } from './responsive';
 import { TestContext } from './test';
 
@@ -68,6 +70,8 @@ const main = async () => {
   testRendererInvokeToSelf(testCtx);
   testRendererInvokeToMain(testCtx);
   testRendererInvokeToOne(testCtx);
+  testRendererInvokeToSeveral(testCtx);
+  testRendererInvokeToAll(testCtx);
 };
 
 main();

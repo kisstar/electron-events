@@ -56,10 +56,23 @@ const sendWindowsEvent = () => {
     CHANNEL.RENDERER_SEND_ONE_TO_SEVERAL
   );
 };
+const invokeWindowsEvent = async () => {
+  const titles = await events.invokeTo(
+    downtimeWindowList.value.map(win => win.name),
+    CHANNEL.RENDERER_INVOKE_ONE_TO_SEVERAL
+  );
+
+  setTitle(titles.toString());
+};
 const invokeMainEvent = async () => {
   const title = await events.invokeTo('main', CHANNEL.RENDERER_INVOKE_TO_MAIN);
 
   setTitle(title);
+};
+const invokeAllWindow = async () => {
+  const titles = await events.invokeTo('*', CHANNEL.RENDERER_INVOKE_ONE_TO_ALL);
+
+  setTitle(titles.toString());
 };
 const triggerMainEvent = (params: TestChannelInfo) => {
   events.emitTo(MAIN_EVENT_NAME, TEST_CHANNEL, params);
@@ -155,6 +168,16 @@ events.handle(CHANNEL.RENDERER_INVOKE_TO_SELF, () => {
       @click="invokeWindowEvent(windowInfo)"
     >
       {{ `Invoke events to ${windowInfo.name} window` }}
+    </button>
+  </p>
+
+  <h3>Multiple events</h3>
+  <p>
+    <button id="renderer-invoke-to-several" @click="invokeWindowsEvent()">
+      Invoke events to Bramble and Briar window
+    </button>
+    <button id="renderer-invoke-to-all" @click="invokeAllWindow">
+      Invoke events to main process and other windows
     </button>
   </p>
 </template>

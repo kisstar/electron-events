@@ -106,7 +106,7 @@ const getPage = async (
 export const getTileOnChanged = (
   brambleWinodwID: number,
   testCtx: TestContext
-) => {
+): Promise<string> => {
   const { electronApp } = testCtx;
 
   return electronApp.evaluate(
