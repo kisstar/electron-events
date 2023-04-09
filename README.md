@@ -1,6 +1,6 @@
 # electron-events
 
-Provide single point and broadcast event system for Electron.
+Provide a cross process event communication system for Electron.
 
 ## Install
 
@@ -50,6 +50,8 @@ events.emitTo('app', 'say_hi', 'Hello World!');
 ```
 
 As you can see, event can be sent and received in either the main process or the renderer process.
+
+[See more](https://github.com/kisstar/electron-events/blob/main/packages/docs/index.md).
 
 ## License
 
