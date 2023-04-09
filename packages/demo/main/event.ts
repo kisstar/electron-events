@@ -1,7 +1,6 @@
 import { join } from 'path';
 import { BrowserWindow, ipcMain } from 'electron';
 import { useEvents, useWindowPool } from '@core/index';
-import { windowPool } from '@core/base';
 import {
   WINDOW_NAME,
   CHANNEL,
@@ -44,7 +43,8 @@ type TestChannelPayload =
 
 export const preload = join(__dirname, './preload.js');
 const debug = getDebug('Main');
-const events = useEvents();
+const events = useEvents('browser');
+const windowPool = useWindowPool();
 const setTitle = (title: string) => `document.title = ${title}`;
 
 function testHandler(params: TestChannelInfo) {
@@ -58,7 +58,6 @@ function testHandler(params: TestChannelInfo) {
 
 ipcMain.handle(TEST_CHANNEL, (_, payload: TestChannelPayload) => {
   const { type } = payload;
-  const windowPool = useWindowPool();
 
   switch (type) {
     case TestChannelType.CREATE_WINDOW: {
@@ -73,7 +72,7 @@ ipcMain.handle(TEST_CHANNEL, (_, payload: TestChannelPayload) => {
 
       win.loadURL(url);
       win.webContents.openDevTools();
-      windowPool.add(name, win);
+      events.addWindow(name, win);
       return win.id;
     }
     case TestChannelType.TEST_HANDLE:

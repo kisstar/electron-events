@@ -66,6 +66,14 @@ export class MainIpcEvents extends IpcEvents {
     });
   }
 
+  addWindow(name: string, bw: BrowserWindow) {
+    return windowPool.add(name, bw);
+  }
+
+  removeWindow(idOrname: string | number) {
+    return windowPool.remove(idOrname);
+  }
+
   private _handleNormalEvent(
     fromName: string,
     toName: string[],
