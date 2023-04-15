@@ -69,8 +69,7 @@ export class RendererIpcEvents extends IpcEvents {
             code: ErrorCode.EXECUTION_EXCEPTION,
             message: new Error(
               `Error occurred in handler for '${evName}': Execution exception'`
-            ),
-            payload: error
+            )
           };
         }
       });

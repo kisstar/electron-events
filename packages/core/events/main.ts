@@ -23,7 +23,13 @@ interface MainEventCenterParams {
 interface HandlerParams {
   code: number;
   message: string;
-  payload?: any;
+  payload?: any[];
+}
+
+interface ResponseArray {
+  isSingleToName?: boolean;
+  isSingleEventName?: boolean;
+  resArr: (never[] | Promise<unknown>)[];
 }
 
 export class MainIpcEvents extends IpcEvents {
@@ -50,7 +56,8 @@ export class MainIpcEvents extends IpcEvents {
         toName.unshift(MAIN_EVENT_NAME);
       }
 
-      const isSingle = isString(toName) && isString(eventName);
+      const isSingleToName = isString(toName);
+      const isSingleEventName = isString(eventName);
 
       if (!isArray(toName)) {
         toName = [toName];
@@ -60,7 +67,8 @@ export class MainIpcEvents extends IpcEvents {
         return this._handleNormalEvent(windowName, toName, params);
       } else {
         return this._handleResponsiveEvent(windowName, toName, params, {
-          isSingle
+          isSingleToName,
+          isSingleEventName
         });
       }
     });
@@ -115,7 +123,7 @@ export class MainIpcEvents extends IpcEvents {
     fromName: string,
     toName: string[],
     params: MainEventCenterParams,
-    { isSingle = false }
+    { isSingleToName = false, isSingleEventName = false }
   ) {
     let { eventName, payload } = params;
 
@@ -149,14 +157,14 @@ export class MainIpcEvents extends IpcEvents {
       return this._listenRenderer(fromName, winName, params);
     });
 
-    if (isSingle) {
-      return Promise.all<any[]>(resOutArr).then(([res]) => res[0]);
-    } else {
-      return Promise.all(resOutArr);
-    }
+    return this._getResponse({
+      isSingleToName,
+      isSingleEventName,
+      resArr: resOutArr
+    });
   }
 
-  _listenRenderer(
+  private _listenRenderer(
     fromName: string,
     toName: string,
     params: MainEventCenterParams
@@ -187,7 +195,7 @@ export class MainIpcEvents extends IpcEvents {
         if (code === ErrorCode.SUCCESS) {
           res(data);
         } else {
-          rej(data || message);
+          rej(message);
         }
       });
     });
@@ -201,6 +209,20 @@ export class MainIpcEvents extends IpcEvents {
     });
 
     return eventPromise;
+  }
+
+  private _getResponse({ isSingleToName, isSingleEventName, resArr }: ResponseArray) {
+    const result = Promise.all<any[]>(resArr);
+
+    if (isSingleToName && isSingleEventName) {
+      return result.then(([innderRes]) => innderRes[0]);
+    } else if (isSingleToName) {
+      return result.then(([innderRes]) => innderRes);
+    } else if (isSingleEventName) {
+      return result.then(res => res.map(innderRes => innderRes[0]));
+    } else {
+      return result;
+    }
   }
 
   emitTo(
@@ -239,7 +261,8 @@ export class MainIpcEvents extends IpcEvents {
       windowName = windowPool.getAllNames();
     }
 
-    const isSingle = isString(windowName) && isString(eventName);
+    const isSingleToName = isString(windowName);
+    const isSingleEventName = isString(eventName);
 
     if (!isArray(windowName)) {
       windowName = [windowName];
@@ -254,10 +277,10 @@ export class MainIpcEvents extends IpcEvents {
       });
     });
 
-    if (isSingle) {
-      return Promise.all<any[]>(resArr).then(([res]) => res[0]);
-    } else {
-      return Promise.all(resArr);
-    }
+    return this._getResponse({
+      isSingleToName,
+      isSingleEventName,
+      resArr
+    });
   }
 }

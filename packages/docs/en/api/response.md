@@ -97,7 +97,12 @@ Parameter description:
 - **eventName** Event name
 - **args** Parameter list
 
-When both `windowName` and `eventName` are strings, the return value is the return value of the processor. Otherwise, the return value will be a two-dimensional array. Each item in the one-dimensional array corresponds to the specified window, while each item in the two-dimensional array corresponds to the return value of each event handler in each window.
+At this point, the return value will have four situations:
+
+- When both `windowName` and `windowName` are strings, the return value is the corresponding unique event handler's return value.
+- When `windowName` is a string and `windowName` is an array, the return value is a one-dimensional array, and each item in the array corresponds to the processing result for each event in this window.
+- When `windowName` is an array and `windowName` is a string, the return value is a one-dimensional array, and each item in the array corresponds to the processing result of each window for that event.
+- Finally, when both are arrays, the return value will be a two-dimensional array, with each item in the one-dimensional array corresponding to each window, and each item in the two-dimensional array corresponding to the return value of each event handler in each window.
 
 When sending information through this method, the window name cannot be omitted.
 
