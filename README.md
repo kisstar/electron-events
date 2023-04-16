@@ -37,7 +37,7 @@ import { useEvents } from 'electron-events';
 
 const events = useEvents();
 
-events.on('app', 'say_hi', text => {
+events.on('main' /* Name of the main process */, 'say_hi', text => {
   console.log(text);
 });
 

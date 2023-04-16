@@ -1,6 +1,6 @@
 {
   "name": "electron-events",
-  "version": "0.0.1",
+  "version": "0.1.1",
   "description": "Provide single point and broadcast event system.",
   "main": "dist-electron/index.js",
   "module": "dist-electron/index.mjs",
@@ -11,9 +11,7 @@
     "build": "vue-tsc && vite build && tsc"
   },
   "dependencies": {
-    "lodash-es": "^4.17.21",
-    "vue": "^3.2.47",
-    "vue-router": "4"
+    "lodash-es": "^4.17.21"
   },
   "devDependencies": {
     "@playwright/test": "^1.31.2",
@@ -25,6 +23,8 @@
     "typescript": "^4.9.3",
     "vite": "^4.1.0",
     "vite-plugin-electron": "^0.11.1",
+    "vue": "^3.2.47",
+    "vue-router": "4",
     "vue-tsc": "^1.1.3"
   },
   "files": [
