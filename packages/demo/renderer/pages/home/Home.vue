@@ -62,7 +62,7 @@ const invokeWindowsEvent = async () => {
     CHANNEL.RENDERER_INVOKE_ONE_TO_SEVERAL
   );
 
-  setTitle(titles.toString());
+  setTitle(JSON.stringify(titles));
 };
 const invokeMainEvent = async () => {
   const title = await events.invokeTo('main', CHANNEL.RENDERER_INVOKE_TO_MAIN);
@@ -72,7 +72,7 @@ const invokeMainEvent = async () => {
 const invokeAllWindow = async () => {
   const titles = await events.invokeTo('*', CHANNEL.RENDERER_INVOKE_ONE_TO_ALL);
 
-  setTitle(titles.toString());
+  setTitle(JSON.stringify(titles));
 };
 const triggerMainEvent = (params: TestChannelInfo) => {
   events.emitTo(MAIN_EVENT_NAME, TEST_CHANNEL, params);

@@ -11,11 +11,11 @@ export async function testRendererInvokeToSeveral(testCtx: TestContext) {
     await page.click('#renderer-invoke-to-several');
     const title = await titlePromise;
 
-    expect(title.toString()).toBe(
-      [
-        [CHANNEL.RENDERER_INVOKE_ONE_TO_SEVERAL],
-        [CHANNEL.RENDERER_INVOKE_ONE_TO_SEVERAL]
-      ].toString()
+    expect(title).toBe(
+      JSON.stringify([
+        CHANNEL.RENDERER_INVOKE_ONE_TO_SEVERAL,
+        CHANNEL.RENDERER_INVOKE_ONE_TO_SEVERAL
+      ])
     );
   });
 }
@@ -28,12 +28,12 @@ export async function testRendererInvokeToAll(testCtx: TestContext) {
     await page.click('#renderer-invoke-to-all');
     const title = await titlePromise;
 
-    expect(title.toString()).toBe(
-      [
-        [CHANNEL.RENDERER_INVOKE_ONE_TO_ALL],
-        [CHANNEL.RENDERER_INVOKE_ONE_TO_ALL],
-        [CHANNEL.RENDERER_INVOKE_ONE_TO_ALL]
-      ].toString()
+    expect(title).toBe(
+      JSON.stringify([
+        CHANNEL.RENDERER_INVOKE_ONE_TO_ALL,
+        CHANNEL.RENDERER_INVOKE_ONE_TO_ALL,
+        CHANNEL.RENDERER_INVOKE_ONE_TO_ALL
+      ])
     );
   });
 }
