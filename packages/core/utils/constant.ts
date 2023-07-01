@@ -4,6 +4,8 @@ export const MAIN_EVENT_NAME = 'main';
 
 export const ANY_WINDOW_SYMBOL = '*';
 
+export const SELF_NAME = '__ELECTRON_EVENTS_SELF__';
+
 export const enum EventType {
   NORMAL = 'NORMAL',
   RESPONSIVE = 'RESPONSIVE'

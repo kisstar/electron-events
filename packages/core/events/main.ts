@@ -4,6 +4,7 @@ import { windowPool } from '../base';
 import { IpcEvents } from '../models';
 import {
   ANY_WINDOW_SYMBOL,
+  SELF_NAME,
   DEFAULT_TIMEOUT,
   ErrorCode,
   EventType,
@@ -50,9 +51,8 @@ export class MainIpcEvents extends IpcEvents {
         return;
       }
       if (ANY_WINDOW_SYMBOL === toName) {
-        toName = windowPool
-          .getAllNames()
-          .filter(winName => winName !== windowName);
+        toName = windowPool.getAllNames();
+        // .filter(winName => winName !== windowName); // Exclude sender
         toName.unshift(MAIN_EVENT_NAME);
       }
 
@@ -112,7 +112,7 @@ export class MainIpcEvents extends IpcEvents {
       }
 
       toWindow.webContents.send(EVENT_CENTER, {
-        fromName,
+        fromName: fromName === winName ? SELF_NAME : fromName,
         eventName,
         payload
       });
@@ -133,8 +133,9 @@ export class MainIpcEvents extends IpcEvents {
           eventName = [eventName];
         }
 
+        const resFromName = fromName === winName ? SELF_NAME : fromName;
         const resInArr = eventName.map(evName => {
-          const resEventName = this._getEventName(fromName, evName);
+          const resEventName = this._getEventName(resFromName, evName);
           const anyEventName = this._getEventName(ANY_WINDOW_SYMBOL, evName);
           const handler =
             this.responsiveEventMap.get(resEventName) ||
@@ -203,7 +204,7 @@ export class MainIpcEvents extends IpcEvents {
     toWindow.webContents.send(EVENT_CENTER, {
       type: EventType.RESPONSIVE,
       handlerName,
-      fromName,
+      fromName: fromName === toName ? SELF_NAME : fromName,
       eventName,
       payload
     });
@@ -232,6 +233,7 @@ export class MainIpcEvents extends IpcEvents {
   ) {
     if (ANY_WINDOW_SYMBOL === windowName) {
       windowName = windowPool.getAllNames();
+      this.emit(eventName, ...args);
     }
     if (!isArray(windowName)) {
       windowName = [windowName];
@@ -259,6 +261,7 @@ export class MainIpcEvents extends IpcEvents {
   ) {
     if (ANY_WINDOW_SYMBOL === windowName) {
       windowName = windowPool.getAllNames();
+      windowName.unshift(MAIN_EVENT_NAME);
     }
 
     const isSingleToName = isString(windowName);
@@ -268,19 +271,19 @@ export class MainIpcEvents extends IpcEvents {
       windowName = [windowName];
     }
 
-    const resArr = windowName.map(winName => {
-      return this._listenRenderer(MAIN_EVENT_NAME, winName, {
+    return this._handleResponsiveEvent(
+      MAIN_EVENT_NAME,
+      windowName,
+      {
         type: EventType.RESPONSIVE,
         toName: windowName,
         eventName,
         payload: args
-      });
-    });
-
-    return this._getResponse({
-      isSingleToName,
-      isSingleEventName,
-      resArr
-    });
+      },
+      {
+        isSingleToName,
+        isSingleEventName
+      }
+    );
   }
 }

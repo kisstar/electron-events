@@ -1,6 +1,6 @@
 import { EventEmitter } from 'events';
 import { isArray, isEmpty, isFunction, isUndefined, noop } from 'lodash';
-import { ANY_WINDOW_SYMBOL, ErrorCode } from '@core/utils';
+import { ANY_WINDOW_SYMBOL, SELF_NAME, ErrorCode } from '@core/utils';
 
 interface NormalizeOnArg {
   windowNames: string[];
@@ -111,7 +111,9 @@ export class IpcEvents {
   }
 
   protected _getEventName(windowName: string, eventName: string) {
-    return `${windowName ? windowName + '_' : ''}${eventName}`;
+    const hasWinName = windowName && windowName !== SELF_NAME;
+
+    return `${hasWinName ? windowName + '_' : ''}${eventName}`;
   }
 
   once(eventName: string | string[], listener: AnyFunction): this;
