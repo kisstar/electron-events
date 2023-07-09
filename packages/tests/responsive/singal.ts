@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { CHANNEL } from '@demo/utils';
-import { getAppPage, getAppWindowID, getTileOnChanged } from '../utils';
+import { getAppPage, getAppWindowID, getTitleOnChanged } from '../utils';
 import { TestContext } from '../test';
 
 export async function testRendererInvokeToSelf(testCtx: TestContext) {
@@ -17,7 +17,7 @@ export async function testRendererInvokeToMain(testCtx: TestContext) {
   test('invoke events to the main process', async () => {
     const page = await getAppPage(testCtx);
     const appWinodwID = await getAppWindowID(testCtx);
-    const titlePromise = getTileOnChanged(appWinodwID, testCtx);
+    const titlePromise = getTitleOnChanged(appWinodwID, testCtx);
     await page.click('#renderer-invoke-to-main');
     const title = await titlePromise;
 
@@ -29,7 +29,7 @@ export async function testRendererInvokeToOne(testCtx: TestContext) {
   test('invoke an event to another sub window', async () => {
     const page = await getAppPage(testCtx);
     const appWinodwID = await getAppWindowID(testCtx);
-    const titlePromise = getTileOnChanged(appWinodwID, testCtx);
+    const titlePromise = getTitleOnChanged(appWinodwID, testCtx);
     await page.click('#renderer-invoke-to-bramble');
     const title = await titlePromise;
 

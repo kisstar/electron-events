@@ -6,7 +6,7 @@ import {
   getAppWindowID,
   getBrambleWindowID,
   getBriarWindowID,
-  getTileOnChanged
+  getTitleOnChanged
 } from '../utils';
 
 export async function testRendererSendToSeveral(testCtx: TestContext) {
@@ -14,8 +14,8 @@ export async function testRendererSendToSeveral(testCtx: TestContext) {
     const page = await getAppPage(testCtx);
     const brambleWinodwID = await getBrambleWindowID(testCtx);
     const briarWinodwID = await getBriarWindowID(testCtx);
-    const brambleTitlePromise = getTileOnChanged(brambleWinodwID, testCtx);
-    const briarWinodwIDTitlePromise = getTileOnChanged(briarWinodwID, testCtx);
+    const brambleTitlePromise = getTitleOnChanged(brambleWinodwID, testCtx);
+    const briarWinodwIDTitlePromise = getTitleOnChanged(briarWinodwID, testCtx);
     await page.click('#renderer-send-to-several');
     const titles = await Promise.all([
       brambleTitlePromise,
@@ -34,9 +34,9 @@ export async function testRendererSendToAll(testCtx: TestContext) {
     const appWinodwID = await getAppWindowID(testCtx);
     const brambleWinodwID = await getBrambleWindowID(testCtx);
     const briarWinodwID = await getBriarWindowID(testCtx);
-    const appTitlePromise = getTileOnChanged(appWinodwID, testCtx);
-    const brambleTitlePromise = getTileOnChanged(brambleWinodwID, testCtx);
-    const briarWinodwIDTitlePromise = getTileOnChanged(briarWinodwID, testCtx);
+    const appTitlePromise = getTitleOnChanged(appWinodwID, testCtx);
+    const brambleTitlePromise = getTitleOnChanged(brambleWinodwID, testCtx);
+    const briarWinodwIDTitlePromise = getTitleOnChanged(briarWinodwID, testCtx);
     await page.click('#renderer-send-to-all');
     const titles = await Promise.all([
       appTitlePromise,

@@ -93,11 +93,7 @@ events.on(WINDOW_NAME.APP, CHANNEL.RENDERER_SEND_TO_MAIN, () => {
 });
 
 events.on(WINDOW_NAME.APP, CHANNEL.RENDERER_SEND_ONE_TO_ALL, () => {
-  const win = windowPool.get(WINDOW_NAME.APP);
-
-  win?.webContents.executeJavaScript(
-    setTitle(CHANNEL.RENDERER_SEND_ONE_TO_ALL)
-  );
+  events.emitTo(WINDOW_NAME.BRIAR, CHANNEL.RENDERER_SEND_ONE_TO_ALL);
   debug(
     WINDOW_NAME.APP,
     `Received a message from ${WINDOW_NAME.APP} on channel ${CHANNEL.RENDERER_SEND_ONE_TO_ALL}.`

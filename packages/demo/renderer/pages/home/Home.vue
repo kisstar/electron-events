@@ -89,6 +89,13 @@ events.on(CHANNEL.RENDERER_SEND_TO_SELF, () => {
     `Received a message from yourself on channel ${CHANNEL.RENDERER_SEND_TO_SELF}.`
   );
 });
+events.on(CHANNEL.RENDERER_SEND_ONE_TO_ALL, () => {
+  setTitle(CHANNEL.RENDERER_SEND_ONE_TO_ALL);
+  debug(
+    'self',
+    `Received a message from yourself on channel ${CHANNEL.RENDERER_SEND_ONE_TO_ALL}.`
+  );
+});
 events.handle(CHANNEL.RENDERER_INVOKE_TO_SELF, () => {
   debug(
     'self',
@@ -96,6 +103,14 @@ events.handle(CHANNEL.RENDERER_INVOKE_TO_SELF, () => {
   );
 
   return CHANNEL.RENDERER_INVOKE_TO_SELF;
+});
+events.handle(CHANNEL.RENDERER_INVOKE_ONE_TO_ALL, () => {
+  debug(
+    'self',
+    `Received a message from yourself on channel ${CHANNEL.RENDERER_INVOKE_ONE_TO_ALL}.`
+  );
+
+  return CHANNEL.RENDERER_INVOKE_ONE_TO_ALL;
 });
 </script>
 

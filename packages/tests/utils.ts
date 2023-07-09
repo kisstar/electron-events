@@ -103,7 +103,7 @@ const getPage = async (
   return isWindow ? windowIDMap[windowName] : newPage;
 };
 
-export const getTileOnChanged = (
+export const getTitleOnChanged = (
   brambleWinodwID: number,
   testCtx: TestContext
 ): Promise<string> => {

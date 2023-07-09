@@ -4,7 +4,7 @@ import {
   getAppWindowID,
   getBrambleWindowID,
   getAppPage,
-  getTileOnChanged
+  getTitleOnChanged
 } from '../utils';
 import { TestContext } from '../test';
 
@@ -22,7 +22,7 @@ export async function testRendererSendToMain(testCtx: TestContext) {
   test('send events to the main process', async () => {
     const page = await getAppPage(testCtx);
     const appWinodwID = await getAppWindowID(testCtx);
-    const titlePromise = getTileOnChanged(appWinodwID, testCtx);
+    const titlePromise = getTitleOnChanged(appWinodwID, testCtx);
     await page.click('#renderer-send-to-main');
     const title = await titlePromise;
 
@@ -34,7 +34,7 @@ export async function testRendererSendToOne(testCtx: TestContext) {
   test('send an event to another sub window', async () => {
     const page = await getAppPage(testCtx);
     const brambleWinodwID = await getBrambleWindowID(testCtx);
-    const titlePromise = getTileOnChanged(brambleWinodwID, testCtx);
+    const titlePromise = getTitleOnChanged(brambleWinodwID, testCtx);
     await page.click('#renderer-send-to-bramble');
     const title = await titlePromise;
 
