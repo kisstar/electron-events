@@ -9,20 +9,22 @@ import {
 } from 'lodash';
 import { ANY_WINDOW_SYMBOL, SELF_NAME, ErrorCode } from '@core/utils';
 
-export interface EventStringKey<_T extends Array<any>> extends String {}
+export interface EventStringKey<_T> extends String {}
 
-export interface EventArrayKey<_T extends Array<any>> extends Array<string> {}
+export interface EventArrayKey<_T> extends Array<string> {}
 
-export type EventKey<T extends Array<any>> =
-  | EventStringKey<T>
-  | EventArrayKey<T>;
+export type EventKey<T = []> = EventStringKey<T> | EventArrayKey<T>;
 
 export type IpcEventIdentifier<T extends Array<any> = []> =
   | EventKey<T>
   | string
   | string[];
 
-export type IpcEventArgs<T> = T extends EventKey<infer V> ? V : any;
+export type IpcEventArgs<T> = T extends EventKey<infer V>
+  ? V extends Array<any>
+    ? V
+    : [V]
+  : any[];
 
 export type IpcEventHandler<T> = T extends EventKey<infer V>
   ? EventHandler<V>
