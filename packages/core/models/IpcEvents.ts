@@ -1,6 +1,32 @@
 import { EventEmitter } from 'events';
-import { isArray, isEmpty, isFunction, isUndefined, noop } from 'lodash';
+import {
+  isArray,
+  isEmpty,
+  isFunction,
+  isString,
+  isUndefined,
+  noop
+} from 'lodash';
 import { ANY_WINDOW_SYMBOL, SELF_NAME, ErrorCode } from '@core/utils';
+
+export interface EventStringKey<_T extends Array<any>> extends String {}
+
+export interface EventArrayKey<_T extends Array<any>> extends Array<string> {}
+
+export type EventKey<T extends Array<any>> =
+  | EventStringKey<T>
+  | EventArrayKey<T>;
+
+export type IpcEventIdentifier<T extends Array<any> = []> =
+  | EventKey<T>
+  | string
+  | string[];
+
+export type IpcEventArgs<T> = T extends EventKey<infer V> ? V : any;
+
+export type IpcEventHandler<T> = T extends EventKey<infer V>
+  ? EventHandler<V>
+  : EventHandler;
 
 interface NormalizeOnArg {
   windowNames: string[];
@@ -25,15 +51,18 @@ export class IpcEvents {
     }
   };
 
-  on(eventName: string | string[], listener: AnyFunction): this;
-  on(
+  on<K extends IpcEventIdentifier = IpcEventIdentifier>(
+    eventName: K,
+    listener: IpcEventHandler<K>
+  ): this;
+  on<K extends IpcEventIdentifier = IpcEventIdentifier>(
     windowName: string | string[],
-    eventName: string | string[],
-    listener: AnyFunction
+    eventName: K,
+    listener: IpcEventHandler<K>
   ): this;
   on(
     windowName: string | string[],
-    eventName: string | string[] | AnyFunction,
+    eventName: IpcEventIdentifier | AnyFunction,
     listener?: AnyFunction
   ): this {
     const { windowNames, eventNames, callback } = this._normalizeArg(
@@ -49,7 +78,7 @@ export class IpcEvents {
 
   protected _normalizeArg(
     windowName: string | string[],
-    eventName?: string | string[] | AnyFunction,
+    eventName?: IpcEventIdentifier | AnyFunction,
     listener?: AnyFunction
   ): NormalizeOnArg {
     if (isFunction(eventName)) {
@@ -64,13 +93,13 @@ export class IpcEvents {
     if (!isArray(windowName)) {
       windowName = [windowName];
     }
-    if (!isArray(eventName)) {
+    if (isString(eventName)) {
       eventName = [eventName];
     }
 
     return {
       windowNames: windowName,
-      eventNames: eventName,
+      eventNames: [...eventName],
       callback: listener || noop
     };
   }
@@ -116,15 +145,18 @@ export class IpcEvents {
     return `${hasWinName ? windowName + '_' : ''}${eventName}`;
   }
 
-  once(eventName: string | string[], listener: AnyFunction): this;
-  once(
+  once<K extends IpcEventIdentifier = IpcEventIdentifier>(
+    eventName: K,
+    listener: IpcEventHandler<K>
+  ): this;
+  once<K extends IpcEventIdentifier = IpcEventIdentifier>(
     windowName: string | string[],
-    eventName: string | string[],
-    listener: AnyFunction
+    eventName: K,
+    listener: IpcEventHandler<K>
   ): this;
   once(
     windowName: string | string[],
-    eventName: string | string[] | AnyFunction,
+    eventName: IpcEventIdentifier | AnyFunction,
     listener?: AnyFunction
   ): this {
     const { windowNames, eventNames, callback } = this._normalizeArg(
@@ -140,30 +172,39 @@ export class IpcEvents {
 
   /**
    * Trigger the event listening in the current process.
-   * @param {string} eventName Event name.
+   * @param {IpcEventIdentifier} eventName Event name.
    * @param {any[]} args Additional parameters.
    */
-  emit(eventName: string | string[], ...args: any[]) {
-    if (!isArray(eventName)) {
-      eventName = [eventName];
+  emit<K extends IpcEventIdentifier = IpcEventIdentifier>(
+    eventName: K,
+    ...args: IpcEventArgs<K>
+  ): void;
+  emit(eventName: IpcEventIdentifier, ...args: any[]) {
+    const eventNames: string[] = [];
+
+    if (isString(eventName)) {
+      eventNames.push(eventName);
+    } else {
+      eventNames.push(...eventName);
     }
 
-    eventName.forEach(name => {
+    eventNames.forEach(name => {
       this.eventMap.emit(name, ...args);
     });
   }
 
-  off(eventName: string | string[]): this;
-  off(windowName: string | string[], eventName: string | string[]): this;
-  off(eventName: string | string[], listener: AnyFunction): this;
-  off(
+  off<K extends IpcEventIdentifier = IpcEventIdentifier>(
+    eventName: K,
+    listener?: IpcEventHandler<K>
+  ): this;
+  off<K extends IpcEventIdentifier = IpcEventIdentifier>(
     windowName: string | string[],
-    eventName: string | string[],
-    listener: AnyFunction
+    eventName: K,
+    listener?: IpcEventHandler<K>
   ): this;
   off(
     windowName: string | string[],
-    eventName?: string | string[] | AnyFunction,
+    eventName?: IpcEventIdentifier | AnyFunction,
     listener?: AnyFunction
   ): this {
     const { windowNames, eventNames, callback } = this._normalizeArg(
@@ -191,15 +232,18 @@ export class IpcEvents {
     return this;
   }
 
-  handle(eventName: string | string[], listener: AnyFunction): this;
-  handle(
+  handle<K extends IpcEventIdentifier = IpcEventIdentifier>(
+    eventName: K,
+    listener: IpcEventHandler<K>
+  ): this;
+  handle<K extends IpcEventIdentifier = IpcEventIdentifier>(
     windowName: string | string[],
-    eventName: string | string[],
-    listener: AnyFunction
+    eventName: K,
+    listener: IpcEventHandler<K>
   ): this;
   handle(
     windowName: string | string[],
-    eventName: string | string[] | AnyFunction,
+    eventName: IpcEventIdentifier | AnyFunction,
     listener?: AnyFunction
   ): this {
     const { windowNames, eventNames, callback } = this._normalizeArg(
@@ -244,15 +288,18 @@ export class IpcEvents {
     return this;
   }
 
-  handleOnce(eventName: string | string[], listener: AnyFunction): this;
-  handleOnce(
+  handleOnce<K extends IpcEventIdentifier = IpcEventIdentifier>(
+    eventName: K,
+    listener: IpcEventHandler<K>
+  ): this;
+  handleOnce<K extends IpcEventIdentifier = IpcEventIdentifier>(
     windowName: string | string[],
-    eventName: string | string[],
-    listener: AnyFunction
+    eventName: K,
+    listener: IpcEventHandler<K>
   ): this;
   handleOnce(
     windowName: string | string[],
-    eventName: string | string[] | AnyFunction,
+    eventName: IpcEventIdentifier | AnyFunction,
     listener?: AnyFunction
   ): this {
     const { windowNames, eventNames, callback } = this._normalizeArg(
@@ -266,16 +313,22 @@ export class IpcEvents {
     return this;
   }
 
-  async invoke(eventName: string | string[], ...args: any[]) {
+  async invoke<K extends IpcEventIdentifier = IpcEventIdentifier>(
+    eventName: K,
+    ...args: IpcEventArgs<K>
+  ) {
     // We will process the parameters received from the user in the form of an array
     // and determine the return value based on the actual number of parameters.
     const isMultipleEvents = isArray(eventName);
+    const eventNames: string[] = [];
 
-    if (!isArray(eventName)) {
-      eventName = [eventName];
+    if (isString(eventName)) {
+      eventNames.push(eventName);
+    } else if (isArray(eventName)) {
+      eventNames.push(...eventName);
     }
 
-    const resArr = eventName.map(async evName => {
+    const resArr = eventNames.map(async evName => {
       const handler = this.responsiveEventMap.get(evName);
 
       if (!isFunction(handler)) {
@@ -303,14 +356,16 @@ export class IpcEvents {
     return isMultipleEvents ? Promise.all(resArr) : resArr[0];
   }
 
-  removeHandler(eventName: string | string[]): this;
-  removeHandler(
+  removeHandler<K extends IpcEventIdentifier = IpcEventIdentifier>(
+    eventName: K
+  ): this;
+  removeHandler<K extends IpcEventIdentifier = IpcEventIdentifier>(
     windowName: string | string[],
-    eventName: string | string[]
+    eventName: K
   ): this;
   removeHandler(
     windowName: string | string[],
-    eventName?: string | string[]
+    eventName?: IpcEventIdentifier
   ): this {
     const { windowNames, eventNames } = this._normalizeArg(
       windowName,
