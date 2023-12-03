@@ -12,6 +12,7 @@ import {
   getUUID,
   MAIN_EVENT_NAME
 } from '../utils';
+import type { IpcEventIdentifier, IpcEventArgs } from '../models';
 
 interface MainEventCenterParams {
   type?: EventType;
@@ -212,7 +213,11 @@ export class MainIpcEvents extends IpcEvents {
     return eventPromise;
   }
 
-  private _getResponse({ isSingleToName, isSingleEventName, resArr }: ResponseArray) {
+  private _getResponse({
+    isSingleToName,
+    isSingleEventName,
+    resArr
+  }: ResponseArray) {
     const result = Promise.all<any[]>(resArr);
 
     if (isSingleToName && isSingleEventName) {
@@ -226,10 +231,10 @@ export class MainIpcEvents extends IpcEvents {
     }
   }
 
-  emitTo(
+  emitTo<K extends IpcEventIdentifier = IpcEventIdentifier>(
     windowName: string | string[],
-    eventName: string | string[],
-    ...args: any[]
+    eventName: K,
+    ...args: IpcEventArgs<K>
   ) {
     if (ANY_WINDOW_SYMBOL === windowName) {
       windowName = windowPool.getAllNames();
@@ -254,10 +259,10 @@ export class MainIpcEvents extends IpcEvents {
     });
   }
 
-  invokeTo(
+  invokeTo<K extends IpcEventIdentifier = IpcEventIdentifier>(
     windowName: string | string[],
-    eventName: string | string[],
-    ...args: any[]
+    eventName: K,
+    ...args: IpcEventArgs<K>
   ) {
     if (ANY_WINDOW_SYMBOL === windowName) {
       windowName = windowPool.getAllNames();
@@ -266,9 +271,15 @@ export class MainIpcEvents extends IpcEvents {
 
     const isSingleToName = isString(windowName);
     const isSingleEventName = isString(eventName);
+    const eventNames = [];
 
     if (!isArray(windowName)) {
       windowName = [windowName];
+    }
+    if (isString(eventName)) {
+      eventNames.push(eventName);
+    } else if (isArray(eventName)) {
+      eventNames.push(...eventName);
     }
 
     return this._handleResponsiveEvent(
@@ -277,7 +288,7 @@ export class MainIpcEvents extends IpcEvents {
       {
         type: EventType.RESPONSIVE,
         toName: windowName,
-        eventName,
+        eventName: eventNames,
         payload: args
       },
       {

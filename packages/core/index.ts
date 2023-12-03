@@ -7,6 +7,8 @@ type EventMethod = keyof RendererIpcEvents;
 
 export type { MainIpcEvents, RendererIpcEvents };
 
+export type { EventKey } from './models';
+
 export { useWindowPool } from './base';
 
 export function useEvents(type: 'browser'): MainIpcEvents;

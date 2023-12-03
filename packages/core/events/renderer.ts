@@ -7,6 +7,7 @@ import {
   EventType,
   EVENT_CENTER
 } from '../utils';
+import type { IpcEventIdentifier, IpcEventArgs } from '../models';
 
 interface RendererEventCenterParams {
   type?: EventType;
@@ -88,10 +89,10 @@ export class RendererIpcEvents extends IpcEvents {
     });
   }
 
-  emitTo(
+  emitTo<K extends IpcEventIdentifier = IpcEventIdentifier>(
     windowName: string | string[],
-    eventName: string | string[],
-    ...args: any[]
+    eventName: K,
+    ...args: IpcEventArgs<K>
   ) {
     ipcRenderer.invoke(EVENT_CENTER, {
       toName: windowName,
@@ -100,10 +101,10 @@ export class RendererIpcEvents extends IpcEvents {
     });
   }
 
-  invokeTo(
+  invokeTo<K extends IpcEventIdentifier = IpcEventIdentifier>(
     windowName: string | string[],
-    eventName: string | string[],
-    ...args: any[]
+    eventName: K,
+    ...args: IpcEventArgs<K>
   ) {
     return ipcRenderer.invoke(EVENT_CENTER, {
       type: EventType.RESPONSIVE,
