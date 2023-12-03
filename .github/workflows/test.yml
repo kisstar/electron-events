@@ -1,0 +1,46 @@
+name: test
+
+on:
+  push:
+    paths:
+      - 'packages/core/**'
+      - 'packages/demo/**'
+      - 'packages/tests/**'
+      - 'vite.config.ts'
+      - 'package.json'
+
+jobs:
+  test:
+    name: test
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        node: [18]
+        include:
+          - build: linux
+            os: ubuntu-latest
+
+          - build: macos
+            os: macos-latest
+
+          - build: windows-gnu
+            os: windows-latest
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
+      - name: Use Node.js ${{ matrix.node }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+
+      - name: Install dependencies
+        run: |
+          echo "" > .npmrc
+          npm install -g pnpm
+          pnpm install --no-frozen-lockfile
+
+      - name: Run tests
+        run: pnpm test

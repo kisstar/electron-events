@@ -7,7 +7,7 @@
   "types": "dist-electron/types",
   "scripts": {
     "dev": "vite",
-    "test": "NODE_ENV=test npm run build && playwright test",
+    "test": "cross-env NODE_ENV=test npm run build && playwright test",
     "build": "vue-tsc && vite build && tsc"
   },
   "dependencies": {
@@ -18,6 +18,7 @@
     "@types/lodash": "^4.14.191",
     "@types/node": "^18.15.0",
     "@vitejs/plugin-vue": "^4.0.0",
+    "cross-env": "^7.0.3",
     "electron": "^23.1.0",
     "playwright": "^1.31.2",
     "typescript": "^4.9.3",
