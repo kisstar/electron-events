@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.3.0](https://github.com/kisstar/electron-events/compare/v0.2.0...v0.3.0) (2023-12-04)
+
+
+### Features
+
+* **core:** support providing types for data and event handlers ([#2](https://github.com/kisstar/electron-events/issues/2)) ([fa94650](https://github.com/kisstar/electron-events/commit/fa94650dabf64cbddabb1205996223311d01903a))
+
 ## [0.2.0](https://github.com/kisstar/electron-events/compare/v0.1.1...v0.2.0) (2023-07-09)
 
 
