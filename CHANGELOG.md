@@ -9,7 +9,7 @@ All notable changes to this project will be documented in this file. See [standa
 
 * **core:** wildcard contains sender ([d7b660d](https://github.com/kisstar/electron-events/commit/d7b660dcbb4b2f92edc47cb0fb683213c58c4228))
 
-### 0.1.1 (2023-04-16)
+## 0.1.1 (2023-04-16)
 
 
 ### Features
