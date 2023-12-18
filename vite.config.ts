@@ -3,6 +3,7 @@ import { existsSync, rmSync } from 'fs';
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import electron, { Configuration } from 'vite-plugin-electron';
+import pkg from './package.json';
 
 const resolve = (...paths: string[]) => stlResolve(__dirname, ...paths);
 
@@ -34,7 +35,11 @@ export default defineConfig(({ command }) => {
             ? undefined
             : {
                 rollupOptions: {
-                  external: ['electron', 'events']
+                  external: [
+                    'electron',
+                    'events',
+                    ...Object.keys(pkg.dependencies || {})
+                  ]
                 },
                 lib: {
                   entry: 'packages/core/index.ts',

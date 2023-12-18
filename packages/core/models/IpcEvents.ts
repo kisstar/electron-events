@@ -9,6 +9,8 @@ import {
 } from 'lodash';
 import { ANY_WINDOW_SYMBOL, SELF_NAME, ErrorCode } from '@core/utils';
 
+export type AnyFunction = (...args: any[]) => any;
+
 export interface EventStringKey<_T> extends String {}
 
 export interface EventArrayKey<_T> extends Array<string> {}
@@ -25,6 +27,10 @@ export type IpcEventArgs<T> = T extends EventKey<infer V>
     ? V
     : [V]
   : any[];
+
+export interface EventHandler<T = any[]> {
+  (...args: T extends Array<any> ? T : [T]): any;
+}
 
 export type IpcEventHandler<T> = T extends EventKey<infer V>
   ? EventHandler<V>
