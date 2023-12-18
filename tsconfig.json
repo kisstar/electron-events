@@ -22,5 +22,5 @@
       "@demo/*": ["./packages/demo/*"]
     }
   },
-  "include": ["typings", "./packages/core"]
+  "include": ["./packages/core"]
 }
