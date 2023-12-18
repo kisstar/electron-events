@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.3.1](https://github.com/kisstar/electron-events/compare/v0.3.0...v0.3.1) (2023-12-18)
+
+
+### Bug Fixes
+
+* **core:** global type declaration missing ([#4](https://github.com/kisstar/electron-events/issues/4)) ([0ad4d85](https://github.com/kisstar/electron-events/commit/0ad4d85fa91f6a7ffb9c6f5241f2232b07903f18))
+
 ## [0.3.0](https://github.com/kisstar/electron-events/compare/v0.2.0...v0.3.0) (2023-12-04)
 
 
