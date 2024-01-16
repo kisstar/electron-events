@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.3.2](https://github.com/kisstar/electron-events/compare/v0.3.1...v0.3.2) (2024-01-16)
+
+
+### Bug Fixes
+
+* error in cjs mode ([#6](https://github.com/kisstar/electron-events/issues/6)) ([12e71eb](https://github.com/kisstar/electron-events/commit/12e71eb1d3c1586ac66f2bfe811e0191db1a43c3))
+
 ### [0.3.1](https://github.com/kisstar/electron-events/compare/v0.3.0...v0.3.1) (2023-12-18)
 
 
