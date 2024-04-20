@@ -1,10 +1,10 @@
 # electron-events
 
-Provide a cross process event communication system for Electron.
+为 Electron 提供跨过程事件通信系统。
 
-English . [中文](./README-zh_CN.md)
+[English](./README.md) . 中文
 
-## Install
+## 安装
 
 ```bash
 # use npm
@@ -14,9 +14,9 @@ npm install electron-events
 yarn add electron-events
 ```
 
-## Usage
+## 使用
 
-Add the window module to the event system in the main process:
+在主流程中将窗口模块添加到事件系统中：
 
 ```js
 // main.js
@@ -32,7 +32,7 @@ events.addWindow(
 );
 ```
 
-Then, expose events module via preload:
+然后，通过预加载脚本暴露事件模块：
 
 ```js
 // preload.js
@@ -46,7 +46,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
 });
 ```
 
-Now you don't have to care about the process, just communicate events based on the name of the window:
+现在，您不必关心所处的进程，只需根据窗口的名称来传播事件：
 
 ```js
 // renderer.js
@@ -65,9 +65,9 @@ const events = useEvents();
 events.emitTo('app', 'say_hi', 'Hello World!');
 ```
 
-As you can see, event can be sent and received in either the main process or the renderer process.
+正如您所看到的，事件可以在主进程或渲染器进程中发送和接收。
 
-[See more](https://github.com/kisstar/electron-events/blob/main/packages/docs/index.md).
+[查看更多](https://github.com/kisstar/electron-events/blob/main/packages/docs/zh/index.md).
 
 ## License
 
