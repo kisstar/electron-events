@@ -1,6 +1,6 @@
 # electron-events
 
-为 Electron 提供跨过程事件通信系统。
+为 Electron 提供跨进程的事件通信系统。
 
 [English](./README.md) . 中文
 
@@ -16,7 +16,7 @@ yarn add electron-events
 
 ## 使用
 
-在主流程中将窗口模块添加到事件系统中：
+在主进程中，以窗口名称为标识将其添加到事件系统的窗口池中：
 
 ```js
 // main.js
@@ -32,7 +32,7 @@ events.addWindow(
 );
 ```
 
-然后，通过预加载脚本暴露事件模块：
+然后，通过预加载脚本暴露事件模块给渲染进程：
 
 ```js
 // preload.js
@@ -46,7 +46,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
 });
 ```
 
-现在，您不必关心所处的进程，只需根据窗口的名称来传播事件：
+之后，您不必关心所处的进程，只需根据窗口的名称来传播事件：
 
 ```js
 // renderer.js
