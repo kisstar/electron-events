@@ -1,8 +1,8 @@
-import { type RendererIpcEvents } from '@core/events';
+import { type PreloadDependencies } from '@core/index';
 
 export interface IElectronAPI {
   createWindow: (windowInfo: WindowInfo) => void;
-  events: RendererIpcEvents;
+  EVENTS_PRELOAD_DEPENDENCIES: PreloadDependencies;
 }
 
 declare global {

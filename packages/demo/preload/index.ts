@@ -1,12 +1,10 @@
 import { contextBridge, ipcRenderer } from 'electron';
-import { useEvents } from '@core/index';
+import { PRELOAD_DEPENDENCIES as EVENTS_PRELOAD_DEPENDENCIES } from '@core/main';
 import { TestChannelType, TEST_CHANNEL } from '@demo/utils';
 import { WindowInfo } from '@demo/main/event';
 
-const events = useEvents();
-
 contextBridge.exposeInMainWorld('electronAPI', {
-  events,
+  EVENTS_PRELOAD_DEPENDENCIES,
   createWindow(windowInfo: WindowInfo) {
     return ipcRenderer.invoke(TEST_CHANNEL, {
       type: TestChannelType.CREATE_WINDOW,
