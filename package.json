@@ -1,16 +1,35 @@
 {
   "name": "electron-events",
-  "version": "0.3.2",
+  "version": "1.0.0-alpha.0",
   "description": "Provide single point and broadcast event system.",
   "main": "dist-electron/index.js",
   "module": "dist-electron/index.mjs",
-  "types": "dist-electron/types",
+  "types": "dist-electron/types/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist-electron/index.mjs",
+      "require": "./dist-electron/index.js",
+      "types": "./dist-electron/types/index.d.ts"
+    },
+    "./main": {
+      "import": "./dist-electron/main.mjs",
+      "require": "./dist-electron/main.js",
+      "types": "./dist-electron/types/main.d.ts"
+    },
+    "./renderer": {
+      "import": "./dist-electron/renderer.mjs",
+      "require": "./dist-electron/renderer.js",
+      "types": "./dist-electron/types/renderer.d.ts"
+    },
+    "./*": "./*"
+  },
   "scripts": {
     "dev": "vite",
-    "test": "cross-env NODE_ENV=test npm run build && playwright test",
-    "build": "vue-tsc && vite build && tsc"
+    "test": "vue-tsc && vite build && tsc && playwright test",
+    "build": "node scripts/build.mjs && tsc"
   },
   "dependencies": {
+    "eventemitter3": "^5.0.1",
     "lodash-es": "^4.17.21"
   },
   "devDependencies": {
@@ -18,7 +37,6 @@
     "@types/lodash": "^4.14.191",
     "@types/node": "^18.15.0",
     "@vitejs/plugin-vue": "^4.0.0",
-    "cross-env": "^7.0.3",
     "electron": "^23.1.0",
     "playwright": "^1.31.2",
     "typescript": "^4.9.3",

@@ -20,9 +20,9 @@ Add the window module to the event system in the main process:
 
 ```js
 // main.js
-import { useEvents } from 'electron-events';
+import { useEvents } from 'electron-events/main';
 
-const events = useEvents('browser');
+const events = useEvents();
 const mainWindow = new BrowserWindow();
 
 events.addWindow(
@@ -32,17 +32,15 @@ events.addWindow(
 );
 ```
 
-Then, expose events module via preload:
+Then, pass the dependencies to the rendering process through preload script:
 
 ```js
 // preload.js
 import { contextBridge } from 'electron';
-import { useEvents } from 'electron-events';
-
-const ipcEvents = useEvents();
+import { PRELOAD_DEPENDENCIES as EVENTS_PRELOAD_DEPENDENCIES } from 'electron-events/main';
 
 contextBridge.exposeInMainWorld('electronAPI', {
-  ipcEvents
+  EVENTS_PRELOAD_DEPENDENCIES
 });
 ```
 
@@ -50,7 +48,10 @@ Now you don't have to care about the process, just communicate events based on t
 
 ```js
 // renderer.js
-const useEvents = () => window.electronAPI.ipcEvents;
+import { useEvents as useRendererEvents } from 'electron-events/renderer';
+
+const useEvents = () =>
+  useRendererEvents(window.electronAPI.EVENTS_PRELOAD_DEPENDENCIES); // Remember to inject dependencies
 const events = useEvents();
 
 events.on('main' /* Name of the main process */, 'say_hi', text => {
@@ -58,7 +59,7 @@ events.on('main' /* Name of the main process */, 'say_hi', text => {
 });
 
 // main.js
-import { useEvents } from 'electron-events';
+import { useEvents } from 'electron-events/main';
 
 const events = useEvents();
 

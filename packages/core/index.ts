@@ -1,15 +1,20 @@
-import { bind } from 'lodash';
-import { MainIpcEvents, RendererIpcEvents } from './events';
+import {
+  useEvents as useMainEvents,
+  PRELOAD_DEPENDENCIES,
+  type MainIpcEvents
+} from './main';
+import {
+  useEvents as useRendererEvents,
+  type RendererIpcEvents
+} from './renderer';
 
-let mainEvents: MainIpcEvents | null = null;
-let rendererEvents: RendererIpcEvents | null = null;
-type EventMethod = keyof RendererIpcEvents;
+export {
+  PRELOAD_DEPENDENCIES,
+  useWindowPool,
+  type MainIpcEvents
+} from './main';
 
-export type { MainIpcEvents, RendererIpcEvents };
-
-export type { EventKey } from './models';
-
-export { useWindowPool } from './base';
+export { type RendererIpcEvents } from './renderer';
 
 export function useEvents(type: 'browser'): MainIpcEvents;
 export function useEvents(
@@ -17,36 +22,12 @@ export function useEvents(
 ): RendererIpcEvents;
 export function useEvents(type = process.type) {
   if ('browser' === type) {
-    if (!mainEvents) {
-      mainEvents = new MainIpcEvents();
-    }
-
-    return mainEvents;
+    return useMainEvents();
   }
 
-  if (!rendererEvents) {
-    const methodList: EventMethod[] = [
-      'on',
-      'once',
-      'emit',
-      'emitTo',
-      'off',
-      'handle',
-      'handleOnce',
-      'invoke',
-      'invokeTo',
-      'removeHandler'
-    ];
-
-    rendererEvents = new RendererIpcEvents();
-    methodList.forEach(
-      methodName =>
-        (rendererEvents![methodName] = bind(
-          rendererEvents![methodName],
-          rendererEvents
-        ))
-    );
-  }
-
-  return rendererEvents;
+  return useRendererEvents(PRELOAD_DEPENDENCIES);
 }
+
+export * from './common';
+
+export default useEvents;

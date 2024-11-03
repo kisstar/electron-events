@@ -104,15 +104,15 @@ const getPage = async (
 };
 
 export const getTitleOnChanged = (
-  brambleWinodwID: number,
+  brambleWindowID: number,
   testCtx: TestContext
 ): Promise<string> => {
   const { electronApp } = testCtx;
 
   return electronApp.evaluate(
-    ({ BrowserWindow }, { brambleWinodwID }) => {
+    ({ BrowserWindow }, { brambleWindowID }) => {
       const window = BrowserWindow.getAllWindows().find(
-        window => brambleWinodwID === window.id
+        window => brambleWindowID === window.id
       );
 
       return new Promise((resolve, reject) => {
@@ -124,7 +124,7 @@ export const getTitleOnChanged = (
       });
     },
     {
-      brambleWinodwID
+      brambleWindowID
     }
   );
 };
@@ -142,9 +142,9 @@ export const getBramblePage = async (testCtx: TestContext) => {
 };
 
 export const getBriarPage = async (testCtx: TestContext) => {
-  const briarlePage = await getPage(WINDOW_NAME.BRIAR, testCtx);
+  const briarPage = await getPage(WINDOW_NAME.BRIAR, testCtx);
 
-  return briarlePage as Page;
+  return briarPage as Page;
 };
 
 export const getAppWindowID = async (testCtx: TestContext) => {

@@ -1,6 +1,6 @@
 import { join } from 'path';
 import { BrowserWindow, ipcMain } from 'electron';
-import { useEvents, useWindowPool, type EventKey } from '@core/index';
+import { useEvents, useWindowPool, type EventKey } from '@core/main';
 import {
   WINDOW_NAME,
   CHANNEL,
@@ -43,7 +43,7 @@ type TestChannelPayload =
 
 export const preload = join(__dirname, './preload.js');
 const debug = getDebug('Main');
-const events = useEvents('browser');
+const events = useEvents();
 const windowPool = useWindowPool();
 const setTitle = (title: string | EventKey<any>) => `document.title = ${title}`;
 

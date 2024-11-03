@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { onMounted, computed } from 'vue';
 import { MAIN_EVENT_NAME } from '@core/utils';
+import type { EventKey } from '@core/index';
 import { TestChannelInfo, WindowInfo } from '@demo/main/event';
 import { useEvents } from '@demo/renderer/hooks';
 import { windowList } from '@demo/renderer/config';
@@ -11,13 +12,16 @@ import {
   getDebug,
   setTitle
 } from '@demo/utils';
-import { mainButtonList } from './constants';
+import { mainButtonList } from '@demo/renderer/pages/home/constants';
 
 const debug = getDebug(WINDOW_NAME.APP);
 const events = useEvents();
+const recordMap = new Map<EventKey, EventKey[]>();
+
 const downtimeWindowList = computed(() =>
   windowList.filter(win => win.status !== 'lock')
 );
+
 const createWindow = (windowInfo: WindowInfo) => {
   window.electronAPI.createWindow(windowInfo);
 };
@@ -76,6 +80,22 @@ const invokeAllWindow = async () => {
 };
 const triggerMainEvent = (params: TestChannelInfo) => {
   events.emitTo(MAIN_EVENT_NAME, TEST_CHANNEL, params);
+};
+const invokeOneToOneOnce = async () => {
+  const title = await events.invokeTo(
+    WINDOW_NAME.BRAMBLE,
+    CHANNEL.RENDERER_INVOKE_ONE_TO_ONE_ONCE
+  );
+
+  let record = recordMap.get(CHANNEL.RENDERER_INVOKE_ONE_TO_ONE_ONCE);
+
+  if (!record) {
+    record = [];
+    recordMap.set(CHANNEL.RENDERER_INVOKE_ONE_TO_ONE_ONCE, record);
+  }
+
+  record.push(title);
+  setTitle(record);
 };
 
 onMounted(() => {
@@ -195,6 +215,19 @@ events.handle(CHANNEL.RENDERER_INVOKE_ONE_TO_ALL, () => {
       Invoke events to main process and other windows
     </button>
   </p>
+
+  <h3>Once events</h3>
+  <button
+    id="renderer-send-one-to-one-once"
+    @click="
+      events.emitTo(WINDOW_NAME.BRAMBLE, CHANNEL.RENDERER_SEND_ONE_TO_ONE_ONCE)
+    "
+  >
+    Send events to Bramble window
+  </button>
+  <button id="renderer-invoke-one-to-one-once" @click="invokeOneToOneOnce">
+    Invoke events to Bramble window
+  </button>
 </template>
 
 <style>

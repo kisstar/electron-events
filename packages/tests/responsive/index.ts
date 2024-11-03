@@ -1,2 +1,2 @@
-export * from './singal';
+export * from './single';
 export * from './several';
