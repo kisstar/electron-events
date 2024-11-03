@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.0.0-alpha.0](https://github.com/kisstar/electron-events/compare/v0.3.2...v1.0.0-alpha.0) (2024-11-03)
+
+
+### Features
+
+* **core:** adjust the export and repair once methods ([382321d](https://github.com/kisstar/electron-events/commit/382321da93e3fdbf4d97f3b178265c52d4658598))
+* **core:** separate dependencies on IPC modules ([573f03f](https://github.com/kisstar/electron-events/commit/573f03f3db794053caed977988fb72e7016427bd))
+
 ### [0.3.2](https://github.com/kisstar/electron-events/compare/v0.3.1...v0.3.2) (2024-01-16)
 
 
