@@ -10,6 +10,7 @@ import {
   testRendererSendToSelf,
   testRendererSendToMain,
   testRendererSendToOne,
+  testCancelRendererSendToOne,
   testRendererSendToSeveral,
   testRendererSendToAll
 } from './broadcast';
@@ -17,6 +18,7 @@ import {
   testRendererInvokeToSelf,
   testRendererInvokeToMain,
   testRendererInvokeToOne,
+  testCancelRendererInvokeToOne,
   testRendererInvokeToSeveral,
   testRendererInvokeToAll
 } from './responsive';
@@ -64,12 +66,14 @@ const main = async () => {
   testRendererSendToSelf(testCtx);
   testRendererSendToMain(testCtx);
   testRendererSendToOne(testCtx);
+  testCancelRendererSendToOne(testCtx);
   testRendererSendToSeveral(testCtx);
   testRendererSendToAll(testCtx);
   // responsive mode
   testRendererInvokeToSelf(testCtx);
   testRendererInvokeToMain(testCtx);
   testRendererInvokeToOne(testCtx);
+  testCancelRendererInvokeToOne(testCtx);
   testRendererInvokeToSeveral(testCtx);
   testRendererInvokeToAll(testCtx);
 };

@@ -1,10 +1,6 @@
 import { join } from 'path';
 import { BrowserWindow, ipcMain } from 'electron';
-import {
-  useMainEvents as useEvents,
-  useWindowPool,
-  type EventKey
-} from '@core/main';
+import { useEvents, useWindowPool, type EventKey } from '@core/main';
 import {
   WINDOW_NAME,
   CHANNEL,

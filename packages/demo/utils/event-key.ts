@@ -19,3 +19,7 @@ export const RENDERER_INVOKE_ONE_TO_ONE: EventKey = '7';
 export const RENDERER_INVOKE_ONE_TO_SEVERAL: EventKey = '8';
 
 export const RENDERER_INVOKE_ONE_TO_ALL: EventKey = '9';
+
+export const RENDERER_SEND_ONE_TO_ONE_ONCE: EventKey = '10';
+
+export const RENDERER_INVOKE_ONE_TO_ONE_ONCE: EventKey = '11';

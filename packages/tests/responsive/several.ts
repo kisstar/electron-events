@@ -6,8 +6,8 @@ import { getAppPage, getAppWindowID, getTitleOnChanged } from '../utils';
 export async function testRendererInvokeToSeveral(testCtx: TestContext) {
   test('invoke events to multiple windows', async () => {
     const page = await getAppPage(testCtx);
-    const appWinodwID = await getAppWindowID(testCtx);
-    const titlePromise = getTitleOnChanged(appWinodwID, testCtx);
+    const appWindowID = await getAppWindowID(testCtx);
+    const titlePromise = getTitleOnChanged(appWindowID, testCtx);
     await page.click('#renderer-invoke-to-several');
     const title = await titlePromise;
 
@@ -23,8 +23,8 @@ export async function testRendererInvokeToSeveral(testCtx: TestContext) {
 export async function testRendererInvokeToAll(testCtx: TestContext) {
   test('invoke events to all windows', async () => {
     const page = await getAppPage(testCtx);
-    const appWinodwID = await getAppWindowID(testCtx);
-    const titlePromise = getTitleOnChanged(appWinodwID, testCtx);
+    const appWindowID = await getAppWindowID(testCtx);
+    const titlePromise = getTitleOnChanged(appWindowID, testCtx);
     await page.click('#renderer-invoke-to-all');
     const title = await titlePromise;
 
