@@ -3,13 +3,10 @@ import { type PreloadDependencies } from './dependencies';
 
 export type { RendererIpcEvents };
 
-export function useRendererEvents(preloadDependencies: PreloadDependencies) {
+export function useEvents(preloadDependencies: PreloadDependencies) {
   return RendererIpcEvents.getInstance({ preloadDependencies });
 }
 
-// common export
-export type { EventKey } from './models';
+export * from './common';
 
-export type { PreloadDependencies } from './dependencies';
-
-export { ErrorCode, ANY_WINDOW_SYMBOL } from './utils';
+export default useEvents;

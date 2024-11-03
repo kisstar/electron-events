@@ -6,13 +6,10 @@ export { PRELOAD_DEPENDENCIES } from './dependencies';
 
 export { useWindowPool } from './base';
 
-export function useMainEvents() {
+export function useEvents() {
   return MainIpcEvents.getInstance();
 }
 
-// common export
-export type { EventKey } from './models';
+export * from './common';
 
-export { type PreloadDependencies } from './dependencies';
-
-export { ErrorCode, ANY_WINDOW_SYMBOL } from './utils';
+export default useEvents;

@@ -285,8 +285,11 @@ export class IpcEvents {
 
       if (once) {
         this.responsiveEventMap.set(resEventName, (...args: any[]) => {
-          listener(...args);
+          const result = listener(...args);
+
           this.removeHandler(windowName, eventName);
+
+          return result;
         });
       } else {
         this.responsiveEventMap.set(resEventName, listener);
