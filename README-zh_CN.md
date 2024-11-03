@@ -20,9 +20,9 @@ yarn add electron-events
 
 ```js
 // main.js
-import { useEvents } from 'electron-events';
+import { useEvents } from 'electron-events/main';
 
-const events = useEvents('browser');
+const events = useEvents();
 const mainWindow = new BrowserWindow();
 
 events.addWindow(
@@ -32,17 +32,15 @@ events.addWindow(
 );
 ```
 
-然后，通过预加载脚本暴露事件模块给渲染进程：
+然后，通过预加载脚本将依赖传递给渲染进程：：
 
 ```js
 // preload.js
 import { contextBridge } from 'electron';
-import { useEvents } from 'electron-events';
-
-const ipcEvents = useEvents();
+import { PRELOAD_DEPENDENCIES as EVENTS_PRELOAD_DEPENDENCIES } from 'electron-events/main';
 
 contextBridge.exposeInMainWorld('electronAPI', {
-  ipcEvents
+  EVENTS_PRELOAD_DEPENDENCIES
 });
 ```
 
@@ -50,7 +48,10 @@ contextBridge.exposeInMainWorld('electronAPI', {
 
 ```js
 // renderer.js
-const useEvents = () => window.electronAPI.ipcEvents;
+import { useEvents as useRendererEvents } from 'electron-events/renderer';
+
+const useEvents = () =>
+  useRendererEvents(window.electronAPI.EVENTS_PRELOAD_DEPENDENCIES); // 记得注入依赖
 const events = useEvents();
 
 events.on('main' /* Name of the main process */, 'say_hi', text => {
@@ -58,7 +59,7 @@ events.on('main' /* Name of the main process */, 'say_hi', text => {
 });
 
 // main.js
-import { useEvents } from 'electron-events';
+import { useEvents } from 'electron-events/main';
 
 const events = useEvents();
 
