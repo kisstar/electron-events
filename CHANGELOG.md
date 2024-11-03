@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.0.0](https://github.com/kisstar/electron-events/compare/v0.3.2...v1.0.0) (2024-11-03)
+
+
+### Features
+
+* implement dependency separation between processes ([#10](https://github.com/kisstar/electron-events/issues/10)) ([94fcb07](https://github.com/kisstar/electron-events/commit/94fcb079ac96006048253fd4eb79c7a42637db62))
+
 ## [1.0.0-alpha.0](https://github.com/kisstar/electron-events/compare/v0.3.2...v1.0.0-alpha.0) (2024-11-03)
 
 
