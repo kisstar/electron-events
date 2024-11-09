@@ -7,19 +7,24 @@
   "types": "dist-electron/types/index.d.ts",
   "exports": {
     ".": {
+      "types": "./dist-electron/types/index.d.ts",
       "import": "./dist-electron/index.mjs",
-      "require": "./dist-electron/index.js",
-      "types": "./dist-electron/types/index.d.ts"
+      "require": "./dist-electron/index.js"
     },
     "./main": {
       "import": "./dist-electron/main.mjs",
       "require": "./dist-electron/main.js",
       "types": "./dist-electron/types/main.d.ts"
     },
+    "./preload": {
+      "types": "./dist-electron/types/preload.d.ts",
+      "import": "./dist-electron/preload.mjs",
+      "require": "./dist-electron/preload.js"
+    },
     "./renderer": {
+      "types": "./dist-electron/types/renderer.d.ts",
       "import": "./dist-electron/renderer.mjs",
-      "require": "./dist-electron/renderer.js",
-      "types": "./dist-electron/types/renderer.d.ts"
+      "require": "./dist-electron/renderer.js"
     },
     "./*": "./*"
   },
