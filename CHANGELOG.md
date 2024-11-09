@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.1](https://github.com/kisstar/electron-events/compare/v1.0.0...v1.0.1) (2024-11-09)
+
+
+### Bug Fixes
+
+* can not import ipcRender in ESM ([#12](https://github.com/kisstar/electron-events/issues/12)) ([e77f0cb](https://github.com/kisstar/electron-events/commit/e77f0cbf71e433f93d4cd9d2b2a739fbc2ae885f))
+
 ## [1.0.0](https://github.com/kisstar/electron-events/compare/v0.3.2...v1.0.0) (2024-11-03)
 
 
