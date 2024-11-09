@@ -1,6 +1,5 @@
 name: Bug Report
 description: Report a bug in electron-events
-type: 'bug'
 labels: "bug"
 body:
 - type: input

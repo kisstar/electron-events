@@ -1,18 +1,13 @@
-import {
-  useEvents as useMainEvents,
-  PRELOAD_DEPENDENCIES,
-  type MainIpcEvents
-} from './main';
+import { useEvents as useMainEvents, type MainIpcEvents } from './main';
+import { PRELOAD_DEPENDENCIES } from './preload';
 import {
   useEvents as useRendererEvents,
   type RendererIpcEvents
 } from './renderer';
 
-export {
-  PRELOAD_DEPENDENCIES,
-  useWindowPool,
-  type MainIpcEvents
-} from './main';
+export { useWindowPool, type MainIpcEvents } from './main';
+
+export * from './preload';
 
 export { type RendererIpcEvents } from './renderer';
 

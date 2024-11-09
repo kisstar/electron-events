@@ -37,7 +37,7 @@ Then, pass the dependencies to the rendering process through preload script:
 ```js
 // preload.js
 import { contextBridge } from 'electron';
-import { PRELOAD_DEPENDENCIES as EVENTS_PRELOAD_DEPENDENCIES } from 'electron-events/main';
+import { PRELOAD_DEPENDENCIES as EVENTS_PRELOAD_DEPENDENCIES } from 'electron-events/preload';
 
 contextBridge.exposeInMainWorld('electronAPI', {
   EVENTS_PRELOAD_DEPENDENCIES

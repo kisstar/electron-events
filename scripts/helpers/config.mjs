@@ -22,6 +22,7 @@ export const cjsBuildConf = {
     entry: {
       index: 'packages/core/index.ts',
       main: 'packages/core/main.ts',
+      preload: 'packages/core/preload.ts',
       renderer: 'packages/core/renderer.ts'
     },
     formats: ['cjs']
@@ -38,6 +39,7 @@ export const esBuildConf = {
     entry: {
       index: 'packages/core/index.ts',
       main: 'packages/core/main.ts',
+      preload: 'packages/core/preload.ts',
       renderer: 'packages/core/renderer.ts'
     },
     formats: ['es']
